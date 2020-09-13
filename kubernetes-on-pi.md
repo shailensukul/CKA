@@ -43,3 +43,186 @@ Note: Add that to the end of the first line, do not create a new line.
  sudo apt update && sudo apt dist-upgrade
  ```
  
+ * Reboot
+
+Reboot each Pi:
+
+```
+ sudo reboot
+```
+
+* Create a user for yourself
+```
+ sudo adduser jay
+ usermod -aG sudo jay
+```
+
+* Install Docker
+
+```
+ curl -sSL get.docker.com | sh
+ sudo usermod -aG docker jay
+```
+
+* Set Docker daemon options
+```
+Edit the daemon.json file (this file most likely won't exist yet)
+
+ sudo nano /etc/docker/daemon.json
+
+ {
+   "exec-opts": ["native.cgroupdriver=systemd"],
+   "log-driver": "json-file",
+   "log-opts": {
+     "max-size": "100m"
+   },
+   "storage-driver": "overlay2"
+ }
+```
+
+* Enable routing
+```
+Find the following line in the file:
+
+/etc/sysctl.conf
+
+ #net.ipv4.ip_forward=1
+
+Uncomment that line.
+```
+
+* Reboot again
+```
+ sudo reboot
+```
+
+* Test that docker is working properly
+```
+Check docker daemon:
+
+ systemctl status docker
+
+Run the hello-world container:
+
+ docker run hello-world
+```
+* Add Kubernetes repository
+```
+ sudo nano /etc/apt/sources.list.d/kubernetes.list
+
+Add:
+
+ deb <http://apt.kubernetes.io/> kubernetes-xenial main
+
+Add the GPG key to the Pi:
+
+ curl -s <https://packages.cloud.google.com/apt/doc/apt-key.gpg> | sudo apt-key add -
+```
+
+* Install required Kubernetes packages
+```
+ sudo apt update
+ sudo apt install kubeadm kubectl kubelet
+
+Note: If you get errors with the first command, wait a few minutes and try again.
+```
+
+* Master-only - Initialize Kubernetes
+```
+Run:
+
+ sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+
+Once this runs, you will get some output that will include the join command, but don't join nodes yet. Copy this somewhere for later.
+```
+
+* Set up config directory
+```
+The previous command will give you three additional commands to run, most likely these:
+
+ mkdir -p ~.kube
+ sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Go ahead and run those, but if it recommends different commands, run those instead.
+```
+
+* Install flannel network driver
+```
+ kubectl apply -f <https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml>
+
+Note: The lack of sudo is intentional
+```
+
+* Make sure all the pods come up
+```
+kubectl get pods --all-namespaces
+```
+
+* Join worker nodes to the cluster
+```
+Once all of the pods have come up, run the join command on each worker node. This command was provided in an earlier step.
+```
+
+* Check status of nodes
+```
+See if the nodes have joined successfully, run the following command a few times until everything is ready:
+
+ kubectl get nodes
+```
+
+* pod.yml
+```
+ apiVersion: v1
+ kind: Pod
+ metadata:
+   name: nginx-example
+   labels:
+     app: nginx
+ spec:
+   containers:
+     - name: nginx
+       image: linuxserver/nginx
+       ports:
+         - containerPort: 80
+           name: "nginx-http"
+```
+
+* service-nodeport.yml
+```
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: nginx-example
+ spec:
+   type: NodePort
+   ports:
+     - name: http
+       port: 80
+       nodePort: 30080
+       targetPort: nginx-http
+   selector:
+     app: nginx
+```
+
+* Apply the pod yaml file
+```
+ kubectl apply -f pod.yml
+
+Check the status with:
+
+ kubectl get pods
+
+Check the status with more info:
+
+ kubectl get pods -o wide
+```
+
+* Apply the service yaml file
+```
+ kubectl apply -f service-nodeport.yml
+
+Check the status with:
+
+ kubectl get service
+ ```
