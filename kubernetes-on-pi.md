@@ -11,34 +11,35 @@
 
 ![Flash SSD card](./images/Win32DiskImager.png)
 
-```
-use “ubuntu” for the username and the password. You will be asked to change this default password after you log in.
-```
+
+Use ```ubuntu``` for the username and the password.
+
+You will be asked to change this default password after you log in.
 
 * Edit the host name
 
-```
 Edit /etc/hosts and /etc/hostname on the SD card to the actual name of the instance
 
 For example:
-
+```
  k8s-master
 
  k8s-worker-01
-
-(Or whatever naming scheme you wish)
 ```
+(Or whatever naming scheme you wish)
+
 
 * Configure boot options
-```
-Edit /boot/firmware/cmdline.txt and add:
 
+Edit /boot/firmware/cmdline.txt and add:
+```
 cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1
+```
 
 Note: Add that to the end of the first line, do not create a new line.
-```
 
 * Install all updates
+
 ```
  sudo apt update && sudo apt dist-upgrade
  ```
@@ -65,11 +66,14 @@ Reboot each Pi:
 ```
 
 * Set Docker daemon options
-```
+
 Edit the daemon.json file (this file most likely won't exist yet)
 
+```
  sudo nano /etc/docker/daemon.json
+ ```
 
+ ```
  {
    "exec-opts": ["native.cgroupdriver=systemd"],
    "log-driver": "json-file",
@@ -81,15 +85,15 @@ Edit the daemon.json file (this file most likely won't exist yet)
 ```
 
 * Enable routing
+
+Find the following line in the file: `/etc/sysctl.conf`
+
 ```
-Find the following line in the file:
-
-/etc/sysctl.conf
-
  #net.ipv4.ip_forward=1
+```
 
 Uncomment that line.
-```
+
 
 * Reboot again
 ```
@@ -97,62 +101,65 @@ Uncomment that line.
 ```
 
 * Test that docker is working properly
-```
-Check docker daemon:
 
+Check docker daemon:
+```
  systemctl status docker
+```
 
 Run the hello-world container:
-
+```
  docker run hello-world
 ```
+
 * Add Kubernetes repository
 ```
  sudo nano /etc/apt/sources.list.d/kubernetes.list
-
+```
 Add:
-
- deb <http://apt.kubernetes.io/> kubernetes-xenial main
+```
+ deb http://apt.kubernetes.io/ kubernetes-xenial main
+```
 
 Add the GPG key to the Pi:
-
- curl -s <https://packages.cloud.google.com/apt/doc/apt-key.gpg> | sudo apt-key add -
+```
+ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
 
 * Install required Kubernetes packages
 ```
  sudo apt update
  sudo apt install kubeadm kubectl kubelet
+```
 
 Note: If you get errors with the first command, wait a few minutes and try again.
-```
 
 * Master-only - Initialize Kubernetes
-```
-Run:
 
+Run:
+```
  sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+```
 
 Once this runs, you will get some output that will include the join command, but don't join nodes yet. Copy this somewhere for later.
-```
 
 * Set up config directory
-```
+
 The previous command will give you three additional commands to run, most likely these:
 
+```
  mkdir -p ~.kube
  sudo cp /etc/kubernetes/admin.conf ~/.kube/config
  sudo chown $(id -u):$(id -g) $HOME/.kube/config
-
-Go ahead and run those, but if it recommends different commands, run those instead.
 ```
+Go ahead and run those, but if it recommends different commands, run those instead.
 
 * Install flannel network driver
 ```
- kubectl apply -f <https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml>
+ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+ ```
 
 Note: The lack of sudo is intentional
-```
 
 * Make sure all the pods come up
 ```
@@ -160,14 +167,13 @@ kubectl get pods --all-namespaces
 ```
 
 * Join worker nodes to the cluster
-```
+
 Once all of the pods have come up, run the join command on each worker node. This command was provided in an earlier step.
-```
 
 * Check status of nodes
-```
-See if the nodes have joined successfully, run the following command a few times until everything is ready:
 
+See if the nodes have joined successfully, run the following command a few times until everything is ready:
+```
  kubectl get nodes
 ```
 
@@ -208,21 +214,22 @@ See if the nodes have joined successfully, run the following command a few times
 * Apply the pod yaml file
 ```
  kubectl apply -f pod.yml
-
+```
 Check the status with:
-
+```
  kubectl get pods
-
+```
 Check the status with more info:
-
+```
  kubectl get pods -o wide
 ```
 
 * Apply the service yaml file
 ```
  kubectl apply -f service-nodeport.yml
+```
 
 Check the status with:
-
+```
  kubectl get service
  ```
