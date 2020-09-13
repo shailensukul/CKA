@@ -9,7 +9,7 @@
 
 * Flash SD Card
 
-![Flash SSD card](/images/win32diskimager.png)
+![Flash SSD card](./images/Win32DiskImager.png)
 
 ```
 use “ubuntu” for the username and the password. You will be asked to change this default password after you log in.
