@@ -25,7 +25,10 @@ sudo nano /etc/hostname
 
 Change that hostname, open and edit the necessary file and save.
 
-Next open the hosts file with the command `sudo nano /etc/host`. 
+Next open the hosts file with the command 
+```
+sudo nano /etc/hosts
+```
 Where you see your old hostname (i.e. localhost), change it to the new name. Save and close that file. Now, reboot your machine.
 
 For example:
