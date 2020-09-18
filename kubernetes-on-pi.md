@@ -19,6 +19,9 @@ You will be asked to change this default password after you log in.
 * Edit the host name
 
 Edit /etc/hosts and /etc/hostname on the SD card to the actual name of the instance
+```
+sudo nano /etc/hostname
+```
 
 For example:
 ```
