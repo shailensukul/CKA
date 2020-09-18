@@ -31,6 +31,9 @@ sudo nano /etc/hosts
 ```
 Where you see your old hostname (i.e. localhost), change it to the new name. Save and close that file. Now, reboot your machine.
 
+* In Windows, edit the hosts file to point to your PI IP addresses:
+Path `C:\Windows\System32\drivers\etc\hosts`
+
 For example:
 ```
  k8s-master
