@@ -42,13 +42,6 @@ For example:
 * In Windows, edit the hosts file to point to your PI IP addresses:
 Path `C:\Windows\System32\drivers\etc\hosts`
 
-In that file, look for the entry:
-
-preserve_hostname: false
-Change that entry to:
-
-preserve_hostname: true
-
 * Configure boot options
 
 Edit /boot/firmware/cmdline.txt and add:
