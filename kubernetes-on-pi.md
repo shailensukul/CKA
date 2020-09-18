@@ -39,6 +39,16 @@ For example:
 ```
 (Or whatever naming scheme you wish)
 
+* Preserve the hostname
+```
+sudo nano /etc/cloud/cloud.cfg
+```
+In that file, look for the entry:
+
+preserve_hostname: false
+Change that entry to:
+
+preserve_hostname: true
 
 * Configure boot options
 
