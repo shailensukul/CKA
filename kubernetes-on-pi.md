@@ -38,14 +38,23 @@ and add it to ssh key agent:
 ssh-add ~/.ssh/rpi
 ```
 
+Troubleshooting: 
+In Windows set the "ssh-agent" Windows Service to delayed start.
+
+Start agent with:
+```
+start-ssh-agent.cmd
+```
+
 Log into Pi
 ```
 ssh ubuntu@192.168.0.238
 ```
 
 Let’s log out and copy the SSH keys, so we won’t have to use the password for every login — also for k3sup to be able to deploy the Kubernetes cluster. To copy the SSH keys to the machine run the following
+(Open the Git for windows command prompt)
 ```
-ssh-copy-id -i .ssh/rpi ubuntu@192.168.0.238
+ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.36
 ```
 
 
