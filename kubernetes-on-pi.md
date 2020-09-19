@@ -44,6 +44,17 @@ ssh-copy-id -i .ssh/rpi ubuntu@192.168.0.238
 * Edit the host name
 
 Edit /etc/hosts and /etc/hostname on the SD card to the actual name of the instance
+```
+sudo nano /etc/hostname
+```
+
+Change that hostname, open and edit the necessary file and save.
+
+Next open the hosts file with the command 
+```
+sudo nano /etc/hosts
+```
+Where you see your old hostname (i.e. localhost), change it to the new name. Save and close that file. Now, reboot your machine.
 
 For example:
 ```
@@ -53,6 +64,8 @@ For example:
 ```
 (Or whatever naming scheme you wish)
 
+* In Windows, edit the hosts file to point to your PI IP addresses:
+Path `C:\Windows\System32\drivers\etc\hosts`
 
 * Configure boot options
 
