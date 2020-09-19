@@ -184,11 +184,7 @@ Add the GPG key to the Pi:
 ```
  sudo apt update
 
- sudo snap install kubeadm --classic
-
- sudo snap install kubectl --classic
-
- sudo snap install kubelet --classic
+sudo apt install kubeadm kubectl kubelet
 ```
 
 Note: If you get errors with the first command, wait a few minutes and try again.
