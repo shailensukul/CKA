@@ -4,6 +4,15 @@
 
 [Reference 2](https://medium.com/icetek/building-a-kubernetes-cluster-on-raspberry-pi-running-ubuntu-server-8fc4edb30963)
 
+## Overview
+
+| Pi | IP |
+| --- | --- |
+| pi-1 | 192.168.86.36 | 
+| pi-2 | 192.168.86.45 |
+| pi-3 | 192.168.86.43 |
+| pi-4 | 192.168.86.46 |
+
 ## Set-up Process (do the following on each Raspberry Pi)
 
 * [Download and flash Pi SD card](https://ubuntu.com/download/raspberry-pi)
@@ -38,7 +47,6 @@ Let’s log out and copy the SSH keys, so we won’t have to use the password fo
 ```
 ssh-copy-id -i .ssh/rpi ubuntu@192.168.0.238
 ```
-
 
 
 * Edit the host name
@@ -132,7 +140,6 @@ Find the following line in the file: `/etc/sysctl.conf`
 
 Uncomment that line.
 
-
 * Reboot again
 ```
  sudo reboot
@@ -167,7 +174,12 @@ Add the GPG key to the Pi:
 * Install required Kubernetes packages
 ```
  sudo apt update
- sudo apt install kubeadm kubectl kubelet
+
+ sudo snap install kubeadm --classic
+
+ sudo snap install kubectl --classic
+
+ sudo snap install kubelet --classic
 ```
 
 Note: If you get errors with the first command, wait a few minutes and try again.
