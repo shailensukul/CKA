@@ -2,6 +2,8 @@
 
 [Build Reference](https://wiki.learnlinux.tv/index.php/Setting_up_a_Raspberry_Pi_Kubernetes_Cluster_with_Ubuntu_20.04)
 
+[Reference 2](https://medium.com/icetek/building-a-kubernetes-cluster-on-raspberry-pi-running-ubuntu-server-8fc4edb30963)
+
 ## Set-up Process (do the following on each Raspberry Pi)
 
 * [Download and flash Pi SD card](https://ubuntu.com/download/raspberry-pi)
@@ -15,6 +17,29 @@
 Use ```ubuntu``` for the username and the password.
 
 You will be asked to change this default password after you log in.
+
+## SSH Key
+Generate the key:
+```
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/rpi -P ""
+```
+
+and add it to ssh key agent:
+```
+ssh-add ~/.ssh/rpi
+```
+
+Log into Pi
+```
+ssh ubuntu@192.168.0.238
+```
+
+Let’s log out and copy the SSH keys, so we won’t have to use the password for every login — also for k3sup to be able to deploy the Kubernetes cluster. To copy the SSH keys to the machine run the following
+```
+ssh-copy-id -i .ssh/rpi ubuntu@192.168.0.238
+```
+
+
 
 * Edit the host name
 
