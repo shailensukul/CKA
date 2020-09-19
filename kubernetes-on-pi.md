@@ -203,9 +203,9 @@ Once this runs, you will get some output that will include the join command, but
 The previous command will give you three additional commands to run, most likely these:
 
 ```
- mkdir -p ~.kube
- sudo cp /etc/kubernetes/admin.conf ~/.kube/config
- sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 Go ahead and run those, but if it recommends different commands, run those instead.
 
