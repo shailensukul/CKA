@@ -4,7 +4,7 @@
 
 [Reference 2](https://medium.com/icetek/building-a-kubernetes-cluster-on-raspberry-pi-running-ubuntu-server-8fc4edb30963)
 
-[Pi sd NFS](https://gist.github.com/arkon108/86cba0b742cb8791f9fe1e9639f5205b)
+[Pi as NFS](https://gist.github.com/arkon108/86cba0b742cb8791f9fe1e9639f5205b)
 
 ## Overview
 
