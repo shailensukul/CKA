@@ -4,7 +4,7 @@ Certified Kubernetes Administrator V 1.19
 * [CKA Exam Site](https://www.cncf.io/certification/cka/)
 * [Curriculum](https://github.com/cncf/curriculum)
 * [Kubernetes Documentation](https://kubernetes.io/docs)
-* [Other Guide](https://github.com/David-VTUK/CKA-StudyGuide)
+* [Other Guide](http://www.lib4dev.in/info/walidshaari/Kubernetes-Certified-Administrator/103684801)
 
 
 ## [25% - Cluster Architecture, Installation & Configuration](./Cluster-Architecture-Installation-Configuration/ReadMe.md)
