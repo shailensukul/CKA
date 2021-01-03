@@ -1,2 +1,2 @@
 # 30% - Troubleshooting
-[Back](../ReadMe.md)
+[Back](../README.md)
