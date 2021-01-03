@@ -1,5 +1,5 @@
 # CKA
-Certified Kubernetes Administrator
+Certified Kubernetes Administrator V 1.19
 
 * [CKA Exam Site](https://www.cncf.io/certification/cka/)
 * [Curriculum](https://github.com/cncf/curriculum)
@@ -7,7 +7,8 @@ Certified Kubernetes Administrator
 * [Other Guide](https://github.com/David-VTUK/CKA-StudyGuide)
 
 
-## 25% - Cluster Architecture, Installation & Configuration
+## [25% - Cluster Architecture, Installation & Configuration](./Cluster-Architecture-Installation-Configuration/ReadMe.md)
+
 * Manage role based access control (RBAC)
 * Use Kubeadm to install a basic cluster
 * Manage a highly-available Kubernetes cluster
