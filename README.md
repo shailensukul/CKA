@@ -16,7 +16,7 @@ Certified Kubernetes Administrator V 1.19
 * Perform a version upgrade on a Kubernetes cluster using Kubeadm
 * Implement etcd backup and restore
 
-## 15% - Workloads & Scheduling
+## [15% - Workloads & Scheduling](./Workloads-Scheduling)
 * Understand deployments and how to perform rolling update and rollbacks
 * Use ConfigMaps and Secrets to configure applications
 * Know how to scale applications
@@ -24,7 +24,7 @@ Certified Kubernetes Administrator V 1.19
 * Understand how resource limits can affect Pod scheduling
 * Awareness of manifest management and common templating tools
 
-## 20% - Services & Networking
+## [20% - Services & Networking](./Services-Networking/ReadMe.md)
 * Understand host networking configuration on the cluster nodes
 * Understand connectivity between Pods
 * Understand ClusterIP, NodePort, LoadBalancer service types and endpoints
@@ -32,13 +32,13 @@ Certified Kubernetes Administrator V 1.19
 * Know how to configure and use CoreDNS
 * Choose an appropriate container network interface plugin
 
-## 10% - Storage
+## [10% - Storage](./Storage/ReadMe.md)
 * Understand storage classes, persistent volumes
 * Understand volume mode, access modes and reclaim policies for volumes
 * Understand persistent volume claims primitive
 * Know how to configure applications with persistent storage
 
-## 30% - Troubleshooting
+## [30% - Troubleshooting](./Troubleshooting/ReadMe.md)
 * Evaluate cluster and node logging
 * Understand how to monitor applications
 * Manage container stdout & stderr logs
