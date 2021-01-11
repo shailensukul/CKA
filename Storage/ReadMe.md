@@ -6,12 +6,13 @@
 * Understand [persistent volume claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#persistentvolumeclaims) primitive
 * Know how to [configure applications with persistent storage](https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/)
 
+<details>
+<summary>
 StorageClass, PersistentVolume, and PersitentVolumeClaim examples
-
+</summary>
 ```
 #### Storage Class example
 #
-
 #### Persistent Volume Claim example
 #
 kind: PersistentVolumeClaim
@@ -63,3 +64,4 @@ spec:
       persistentVolumeClaim:
         claimName: local-pvc
 ```
+<details>
