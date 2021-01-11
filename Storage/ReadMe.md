@@ -15,6 +15,7 @@ StorageClass, PersistentVolume, and PersitentVolumeClaim examples
 #
 #### Persistent Volume Claim example
 #
+
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -64,4 +65,4 @@ spec:
       persistentVolumeClaim:
         claimName: local-pvc
 ```
-<details>
+</details>
