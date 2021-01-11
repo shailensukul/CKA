@@ -6,6 +6,8 @@ Certified Kubernetes Administrator V 1.19
 * [Kubernetes Documentation](https://kubernetes.io/docs)
 * [Other Guide](http://www.lib4dev.in/info/walidshaari/Kubernetes-Certified-Administrator/103684801)
 
+## Installation
+[Install on Pi Cluster](kubernetes-on-pi.md)
 
 ## [25% - Cluster Architecture, Installation & Configuration](./Cluster-Architecture-Installation-Configuration/ReadMe.md)
 
