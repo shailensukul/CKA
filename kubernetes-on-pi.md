@@ -306,7 +306,7 @@ Check the status with:
 
 # Upgrading Ubutnu
 
-## Step 1
+## Step 1 Update and upgrade your current Ubuntu 20.04 system:
 
 ```
 sudo apt update 
@@ -314,13 +314,17 @@ sudo apt upgrade
 sudo apt dist-upgrade
 ```
 
-## Step 2
+## Step 2 Remove all unused packages:
 
 ```
 sudo apt autoremove
 ```
 
-## Step 3
+## Step 3 un the Ubuntu upgrade utility.
+
+In case the `do-release-upgrade` command is missing you might need to install the `update-manager-core` packages first.
+
+Furthermore, if you are upgrading before the official upgrade from Ubuntu 18.04 is available you need to use the -d with the bellow command in order to force the direct upgrade:
 
 ```
 sudo do-release-upgrade
