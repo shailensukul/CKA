@@ -302,3 +302,26 @@ Check the status with:
 ```
  kubectl get service
  ```
+
+
+# Upgrading Ubutnu
+
+## Step 1
+
+```
+sudo apt update 
+sudo apt upgrade
+sudo apt dist-upgrade
+```
+
+## Step 2
+
+```
+sudo apt autoremove
+```
+
+## Step 3
+
+```
+sudo do-release-upgrade
+```
