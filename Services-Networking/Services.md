@@ -27,3 +27,15 @@ Endpoints - is a list of IP addresses and ports exposing a service
 ```
 kubectl get endpoints kubia
 ```
+
+# Cleanup
+```
+# Delete the service
+kubectl delete svc kubia
+
+# Delete the replication controller
+kubectl delete rc kubia
+
+# Delete the pod
+kubectl delete pod kubia-qwgfq
+```
