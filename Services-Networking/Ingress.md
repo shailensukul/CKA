@@ -25,6 +25,25 @@ Create a host entry:
 
 Browse kubia.example.com
 
+# TLS
+
+## Create the private key and certificate
+```
+$ openssl genrsa -out tls.key 2048
+$ openssl req -new -x509 -key tls.key -out tls.cert -days 360 -subj /CN=kubia.example.com
+```
+
+## Create the secret from the two files:
+```
+kubectl create secret tls tls-secret --cert=tls.cert --key=tls.key
+```
+
+## Update the Ingress
+
+```
+kubectl apply -f kubia-ingress-tls.yaml
+```
+
 # Cleanup
 ```
 # Delete the service

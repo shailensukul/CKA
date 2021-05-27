@@ -136,3 +136,21 @@ Popular training and practice sites:
 -   [Pluralsight CKA course](https://www.pluralsight.com/paths/certified-kubernetes-administrator)
 -   Duffie Cooly [hands-on CKA video](https://k8s.work/cka-lab.mp4) using KinD and accompanying [notes](https://hackmd.io/@mauilion/cka-lab)
 -   [Stilian Stoilov](https://www.linkedin.com/in/stilian-stoilov-379972a9/) [practice questions](https://github.com/StenlyTU/K8s-training-official) - 40+ tasks with increasing difficulty.
+
+# Screen Recording
+
+Install 
+
+```
+ apt install asciinema
+```
+
+Start
+```
+asciinema rec
+```
+
+Stop
+```
+CTRL + D
+```

@@ -11,3 +11,10 @@
     -   [Kubernetes Networking Intro and Deep-Dive - Bowei Du & Tim Hockin, Google](https://youtu.be/tq9ng_Nz9j8)
     -   [Kubernetes and Networks: why is this so dang hard?](https://youtu.be/xB190-yyJnY?t=241)
     -   [Kubecon Eu 2020 Tutorial: Communication Is Key - Understanding Kubernetes Networking - Jeff Poole, Vivint Smart Home](https://youtu.be/InZVNuKY5GY?list=PLj6h78yzYM2O1wlsM-Ma-RYhfT5LKq0XC)
+
+
+## Cheatsheet
+| Command       | Example           | 
+| ------------- |:-------------:| 
+| Create a resource from file | `kubectl create -f <fname>` | 
+| Update a resource from file | `kubectl apply -f <fname>` | 
