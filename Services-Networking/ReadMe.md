@@ -13,7 +13,7 @@
     -   [Kubecon Eu 2020 Tutorial: Communication Is Key - Understanding Kubernetes Networking - Jeff Poole, Vivint Smart Home](https://youtu.be/InZVNuKY5GY?list=PLj6h78yzYM2O1wlsM-Ma-RYhfT5LKq0XC)
 
 ## Services Notes
-[Chapter 5 - Services: enabling clients to discover and talk to pods](./Services-Networking/Services.md)
+[Chapter 5 - Services: enabling clients to discover and talk to pods](./Services.md)
 
 
 
