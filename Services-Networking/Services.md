@@ -1,6 +1,7 @@
 # Services
 
 Service - is a resource which provides a single, constant point of entry to a group of pods  providing the same service.
+Each service has an IP address and port that never chnage while the service exists.
 
 * Create the service
 ```
