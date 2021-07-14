@@ -11,6 +11,11 @@ Each service has an IP address and port that never chnage while the service exis
  kubectl create -f kubia-svc.yaml
 ```
 
+* Get the service
+```
+kubectl get service
+```
+
 * Describe the service
 ```
 kubectl describe svc kubia
@@ -42,4 +47,82 @@ kubectl delete rc kubia
 
 # Delete the pod
 kubectl delete pod kubia-qwgfq
+```
+
+## Session Affinity in service
+Types of affinity:
+* ClientIP
+* None
+
+```
+apiVersion: V1
+kind: Service
+spec:
+    sessionAffinity: ClientIP
+...
+```
+
+## Exposing Ports
+```
+apiVersion: v1
+kind: Service
+metadata:
+    name: kubia
+spec:
+    ports:
+    - name: http
+      port: 80
+      targerPort: 8080
+    - name: https
+      port:443
+      targetPort: 8443
+selector:
+    app: kubia
+
+```
+
+### Using named ports
+Port definition:
+```
+kind: Pod
+spec:
+    containers:
+    - name: kubia
+    ports:
+    - name: http
+      containerPort: 8080
+    - name: https
+      containerPort: 8443
+
+```
+
+You can then refer to these ports by name:
+```
+apiVersion: v1
+kind: Service
+spec:
+    ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https
+```
+
+## Discovering Services
+
+### Via Environment Variables
+Get the environment variable in a pod by:
+
+```
+kubectl exec kubia-3inly env
+```
+
+Output
+```
+...
+KUBIA_SERVICE_HOST=10.111.249.153
+KUBIA_SERVICE_PORT=80
+...
 ```
