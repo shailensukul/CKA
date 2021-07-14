@@ -126,3 +126,42 @@ KUBIA_SERVICE_HOST=10.111.249.153
 KUBIA_SERVICE_PORT=80
 ...
 ```
+
+The format is: 
+`<service name>_SERVICE_HOST`
+`<service name>_SERVICE_PORT`
+
+### Via DNS
+The `kube-dns` pod, which lives in the `kube-system` namespac, runs a DNS server.
+Kubernetes configures the `/etc/resolv.conf` for each pod so that the pod points to the Kubernetes internal DNS server.
+
+Note: You can configure the DNS server by modifying the `dnsPolicy` property in each pod's spec.
+
+You can use the FQDN to access the service:
+
+`<service name>.<service namespace>.svc.cluster.local`
+Ex:
+`backend-database.default.svc.cluster.local`
+
+
+Note: You still need to grab the port number from the environment variable.
+
+
+## Running in a shell in a Pod's container
+
+```
+kubectl exec -it <podname> -- bash 
+```
+
+Now you can curl the service
+```
+curl http://kubia
+```
+
+or
+```
+curl http://kubia.default.svc.cluster.local
+```
+
+Note: You will not be able top ping a service IP because it is a virtual IP.
+
