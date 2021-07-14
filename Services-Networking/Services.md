@@ -165,3 +165,30 @@ curl http://kubia.default.svc.cluster.local
 
 Note: You will not be able top ping a service IP because it is a virtual IP.
 
+## Connecting to services outside the cluster
+Endpoints sit in between a Service and the resource it links to.
+You can get endpoints by:
+
+`kubectl describe service kubia`
+
+## EndPoints
+*Endpoints* is a list of IP addressses and ports exposing a service.
+
+Get endpoints:
+```
+kubectl get endpoints <servicename>
+```
+
+Note: If you create a service without a selector, it will not create any endpoints.
+
+### External Service
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+    name: external-service
+spec:
+    ports:
+    - port: 80
+```
