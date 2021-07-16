@@ -233,4 +233,13 @@ This is why ExternalName services do not get a CLuster IP.
 
 ## Exposing Services to External Clients
 
+* NodePort service type - each cluster node opens a port on the node itself and redirects traffic received on that port to the underlying service. 
+Service is available in the internal cluster IP, but also a dedicated port on all nodes.
 
+* LoadBalancer service type - makes the service available through a dedicated load balancer, provisioned from the Cloud infrastructure Kubernetes is running on.
+Clients connect via the LoadBalancer IP and it redirects traffic to the node port across all nodes.
+
+* Ingress Resource - operates at the HTTP level (network layer 7) and exposes multiple services through a single IP address
+
+
+![Figure 5.5 Exposing a service to external clients](/images/Services-Expose Service.jpg)
