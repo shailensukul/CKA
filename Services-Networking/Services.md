@@ -210,3 +210,27 @@ subsets:
       port: 80
 ```
 ![Figure 5.4: Pods consuming a service with two external endpoints](/images/Endpoints.jpg)
+
+## ExternalName Service
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-service
+spec:
+  type: ExternalName
+  externalName: someapi.somecompany.com
+  ports:
+  - port: 80
+```
+
+Clients can then connect to external-service.default.svc.cluster.local
+
+ExternalName services are implemented solely at the DNS level - a CNAME DNS is record is created for the service.
+Clients will connect to the external service directly, bypassing the service proxy completely.
+
+This is why ExternalName services do not get a CLuster IP.
+
+## Exposing Services to External Clients
+
+
