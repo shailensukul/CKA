@@ -127,4 +127,86 @@ KUBIA_SERVICE_PORT=80
 ...
 ```
 
+The format is: 
+`<service name>_SERVICE_HOST`
+`<service name>_SERVICE_PORT`
 
+### Via DNS
+The `kube-dns` pod, which lives in the `kube-system` namespac, runs a DNS server.
+Kubernetes configures the `/etc/resolv.conf` for each pod so that the pod points to the Kubernetes internal DNS server.
+
+Note: You can configure the DNS server by modifying the `dnsPolicy` property in each pod's spec.
+
+You can use the FQDN to access the service:
+
+`<service name>.<service namespace>.svc.cluster.local`
+Ex:
+`backend-database.default.svc.cluster.local`
+
+
+Note: You still need to grab the port number from the environment variable.
+
+
+## Running in a shell in a Pod's container
+
+```
+kubectl exec -it <podname> -- bash 
+```
+
+Now you can curl the service
+```
+curl http://kubia
+```
+
+or
+```
+curl http://kubia.default.svc.cluster.local
+```
+
+Note: You will not be able top ping a service IP because it is a virtual IP.
+
+## Connecting to services outside the cluster
+Endpoints sit in between a Service and the resource it links to.
+You can get endpoints by:
+
+`kubectl describe service kubia`
+
+## EndPoints
+*Endpoints* is a list of IP addressses and ports exposing a service.
+
+Get endpoints:
+```
+kubectl get endpoints <servicename>
+```
+
+Note: If you create a service without a selector, it will not create any endpoints.
+
+### External Service
+
+The following service definition does not create any endpoints:
+```
+apiVersion: v1
+kind: Service
+metadata:
+    name: external-service
+spec:
+    ports:
+    - port: 80
+```
+
+Here is how to create an endpoint:
+
+The Endpoints object needs to have the same name as the Service.
+```
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-service
+subsets: 
+  - addresses:
+    - ip: 11.11.11.11
+    - pi: 22.22.22.22
+    ports:
+      port: 80
+```
+![Figure 5.4: Pods consuming a service with two external endpoints](/images/Endpoints.jpg)
