@@ -243,3 +243,37 @@ Clients connect via the LoadBalancer IP and it redirects traffic to the node por
 
 * Ingress Resource - operates at the HTTP level (network layer 7) and exposes multiple services through a single IP address
 
+### NodePort Service
+The service can be accessed by its internal IP and also through anynode's IP and the reserved node port.
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-nodeport
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 8080
+    nodePort: 30123
+  selector:
+    app: kubia
+```
+i
+`root@pi-1:/home/ubuntu# `kubectl get service kubia-nodeport`
+```
+NAME             TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubia-nodeport   NodePort   10.43.72.114   <none>        80:30123/TCP   55d
+```
+
+The External-IP shows `<nodes>` indicating that the service is accessible through the IP address of any cluster node.
+The Port(s) column shows both the internal port of the cluster IP (80) and the node port (30123).
+
+The service is available at the following addresses:
+
+* 10.43.72.114:80
+* <1st node's IP>:30123
+* <2nd node's IP>:30123
+
+![Figure 5.6: An external client connecting to a NodePort service either through Node 1 or 2](/images/Services-NodePort.jpg)
