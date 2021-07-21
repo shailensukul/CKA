@@ -290,3 +290,22 @@ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP
 ```
 
 ### Load Balancer Service
+
+If you set a service's type to LoadBalancer, cloud providers will automatically provision a load balancer.
+If Kubernetes is running in an environment which does not support the Load Balancer service, the service will behave like a NodePort service.
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app:kubia
+```
+
+
