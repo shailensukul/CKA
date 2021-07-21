@@ -277,3 +277,16 @@ The service is available at the following addresses:
 * <2nd node's IP>:30123
 
 ![Figure 5.6: An external client connecting to a NodePort service either through Node 1 or 2](/images/Services-NodePort.jpg)
+
+#### Changing firewall rules to let external clients access the NodePort service
+
+```
+gcloud compute firewall-rules create kubia-svc-rule --allow=tcp:30123
+```
+
+Now you can access your nodes externally on port 30123, you need to work out the IP of the node:
+```
+kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
+```
+
+### Load Balancer Service
