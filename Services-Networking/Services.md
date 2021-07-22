@@ -307,5 +307,15 @@ spec:
   selector:
     app:kubia
 ```
+To get the public IP of the loadbalancer: 
+
+`kubectl get svc kubia-loadbalancer`
+
+Note: When hitting the external url via `curl http://130.211.53.173`, the browser will hit the exact same pod every time.
+Using `kubectl describe kubia-loadbalancer` you can see that the session affinity is set to None. 
+Because the broser is using keep-alive connections, it sends its request through a single connection, whereas curl opens a new connection every time.
+When a connection is first opened, a random port is selected, and all network packets belonging to that connection are all sent to the same pod.
+
+![Figure 5.7 An external client connecting to a LoadBalancer service](/images/Services-LoadBalancer.jpg)
 
 
