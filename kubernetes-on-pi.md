@@ -320,7 +320,7 @@ sudo apt dist-upgrade
 sudo apt autoremove
 ```
 
-## Step 3 un the Ubuntu upgrade utility.
+## Step 3 Install the Ubuntu upgrade utility.
 
 In case the `do-release-upgrade` command is missing you might need to install the `update-manager-core` packages first.
 
@@ -328,4 +328,34 @@ Furthermore, if you are upgrading before the official upgrade from Ubuntu 18.04 
 
 ```
 sudo do-release-upgrade
+```
+
+## Step 4 Upgrade K3S
+
+Manual Upgrade (run on every node)
+```
+# From the stable channel
+curl -sfL https://get.k3s.io | sh -
+
+# Restart servers
+sudo systemctl restart k3s
+
+# Restart agents
+sudo systemctl restart k3s-agent
+```
+
+Check version
+```
+kubectl get nodes -o wide
+```
+
+Install the System Upgrade Controller
+```
+kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/download/v0.6.2/system-upgrade-controller.yaml
+```
+
+Get upgrade plans 
+```
+kubectl -n system-upgrade get plans -o yaml
+kubectl -n system-upgrade get jobs -o yaml
 ```
