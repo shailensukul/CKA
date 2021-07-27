@@ -378,3 +378,21 @@ You can then edit the hosts file:
 `192.168.86.36 kubia.example.com`
 
 ![Accessing pods through an ingress](/images/Services-Ingress-Pod-Access.jpg)
+
+### Exposing multiple services through the same ingress
+You can map multiple paths on the same host to different services:
+
+```
+...
+- host: kubia.example.com
+http:
+  paths:
+  - path: /kubia
+  backend:
+    serviceName: kubia # Requests to kubia.example.com/kubia will be routed ti the kubia service
+    servicePort: 80
+  - path: /bar
+  backend:
+    serviceName: bar # Requests to kubia.example.com/var will be routed to the bat service
+    servicePort: 80
+```
