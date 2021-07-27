@@ -11,3 +11,11 @@ spec:
         backend:
           serviceName: kubia-nodeport
           servicePort: 80
+  - host: sukul.ddns.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubia-nodeport
+          servicePort: 80        
+          

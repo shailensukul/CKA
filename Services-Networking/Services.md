@@ -318,4 +318,63 @@ When a connection is first opened, a random port is selected, and all network pa
 
 ![Figure 5.7 An external client connecting to a LoadBalancer service](/images/Services-LoadBalancer.jpg)
 
+External connections and network hops
+When an external client connects to a service through the nodeport (even when it goes via the loadbalancer first), the random chosen pod may or may not be running on the same node that received the connection.
 
+An additional network hop may be required to reach the node but this may not always be desirable.
+The extra hop can be prevented by the following in the service spec:
+```
+spec:
+  externalTrafficPolicy: Local
+```
+
+This will cause the node receiving the connection to pick a locally runing node. 
+If there are no local noddes, then the connectiom will hang).
+
+This also affects load balancing as it unevenly distributes connections.
+
+Beware of ClientIP
+When pods receive a connection via the NodePort, the packet's sourceIP is changed, because Source Network Address Translation (SNAT) is performed on the packets.
+
+The backing pods cannot see the client IP. `externalTrafficPolicy: Local` will preserve the clientIP because it prevents network hops.
+
+### Ingress Resource
+Ingresses operate at the application layer of the network stack (HTTP) and direct requests to services by inspecting the host and path in the request. In this way, unlike a Load Balancer service, it can use only a single public IP address.
+
+Ingresses operate at the application layer of the network stack (HTTP) and can provide features such as cookie-based session affinity and the like, which services can't.
+
+Ingresses require an Ingress controller to be running in the cluster.
+
+![Exposing multiple services through a single ingress](/images/Services-Ingress.jpg)
+
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubia
+spec:
+  rules:
+  - host: kubia.example.com
+    http:
+      path:
+      - path: /
+        backend:
+          serviceName: kubia-nodeport
+          servicePort: 80
+```
+
+Create the Ingress controller
+`kubectl create -f kubia-ingress.yaml`
+
+Show Ingresses
+`kubectl get ingresses`
+
+```
+NAME    CLASS    HOSTS               ADDRESS         PORTS     AGE
+kubia   <none>   kubia.example.com   192.168.86.36   80, 443   61d
+```
+
+You can then edit the hosts file:
+`192.168.86.36 kubia.example.com`
+
+![Accessing pods through an ingress](/images/Services-Ingress-Pod-Access.jpg)
