@@ -389,10 +389,69 @@ http:
   paths:
   - path: /kubia
   backend:
-    serviceName: kubia # Requests to kubia.example.com/kubia will be routed ti the kubia service
+    serviceName: kubia # Requests to kubia.example.com/kubia will be routed to the kubia service
     servicePort: 80
   - path: /bar
   backend:
     serviceName: bar # Requests to kubia.example.com/var will be routed to the bat service
     servicePort: 80
+```
+
+### Configuring Ingress to handle TLS traffic
+
+* Ingress controller terminates the TLS connection
+* Application running in the Pod does not need to support TLS
+* Need to attach a certificate and a private key to the Ingress, which are stored in a Kubernetes resource called a Secret
+
+Create private key and certificate
+```
+openssl genrsa -out tls.key 2048
+``` 
+
+```
+openssl req -new -x509 -key tls.key -out tls.cert -days 360 =subj /CN=kubia.example.com
+```
+
+Then you create the Secret from the two files:
+```
+kubectl create secret tls tls-secret --cert=tls.cert --key=tls.key 
+```
+
+```
+kubectl create secret tls -h
+```
+
+```
+Create a TLS secret from the given public/private key pair.
+
+ The public/private key pair must exist before hand. The public key certificate must be .PEM encoded and match the given
+private key.
+
+Examples:
+  # Create a new TLS secret named tls-secret with the given key pair:
+  kubectl create secret tls tls-secret --cert=path/to/tls.cert --key=path/to/tls.key
+
+Options:
+      --allow-missing-template-keys=true: If true, ignore any errors in templates when a field or map key is missing in
+the template. Only applies to golang and jsonpath output formats.
+      --append-hash=false: Append a hash of the secret to its name.
+      --cert='': Path to PEM encoded public key certificate.
+      --dry-run='none': Must be "none", "server", or "client". If client strategy, only print the object that would be
+sent, without sending it. If server strategy, submit server-side request without persisting the resource.
+      --field-manager='kubectl-create': Name of the manager used to track field ownership.
+      --key='': Path to private key associated with given certificate.
+  -o, --output='': Output format. One of:
+json|yaml|name|go-template|go-template-file|template|templatefile|jsonpath|jsonpath-as-json|jsonpath-file.
+      --save-config=false: If true, the configuration of current object will be saved in its annotation. Otherwise, the
+annotation will be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+      --show-managed-fields=false: If true, keep the managedFields when printing objects in JSON or YAML format.
+      --template='': Template string or path to template file to use when -o=go-template, -o=go-template-file. The
+template format is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+      --validate=true: If true, use a schema to validate the input before sending it
+
+Usage:
+  kubectl create secret tls NAME --cert=path/to/cert/file --key=path/to/key/file [--dry-run=server|client|none]
+[options]
+
+Use "kubectl options" for a list of global command-line options (applies to all commands).
 ```
