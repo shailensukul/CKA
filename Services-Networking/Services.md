@@ -455,3 +455,54 @@ Usage:
 
 Use "kubectl options" for a list of global command-line options (applies to all commands).
 ```
+
+#### CertificateSigningRequest resource
+
+You can also create a regular certificate request, put it into a CSR, then have the request approved by a human or automated process.
+```
+kubectl certificate approve <name of CSR>
+```
+
+The signed certificate can then be retrieved from the CSR's `status.certificate` field.
+Note: The certificate signer component must be running in the cluster
+
+#### Apply to Ingress
+Update your Ingress so it will accept HTTPS requests:
+```
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kubia
+spec:
+  tls:
+  - hosts:
+    - kubia.example.com
+    secretName: tls-secret
+rules:
+- host: kubia.example.com
+http:
+  paths:
+  - path: /
+    backend:
+      serviceName: kubia-nodeport
+      servicePort: 80
+```
+
+### Readiness Probes
+
+The readiness probe is invoked periodically and determines whether the specific pods should receive client requests or not.
+
+Types of readiness probes:
+
+* Exec probe - process is executed and the container's status is determined by the return code
+* HTTP GET probe - sends HTTP GET request to the container and the HTTP status code determines readiness
+* TCP socket probe - opens a TCP connection to a specified port of the container. If the connection is established, the container is considered ready.
+
+If a pod reports that it is not ready, it is removed from the service.
+If a pod then becomes ready, it is re-added.
+
+Unlike a liveness probe, the container is not killed and restarted.
+
+![Figure 5.11 A pod whose readiness probe fails is removed as an endpoint of a service](/images/Services-Pod-ReadinessProbe.jpg)
+
+Figure 5.11 A pod whose readiness probe fails is removed as an endpoint of a service
