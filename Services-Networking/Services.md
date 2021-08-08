@@ -603,3 +603,30 @@ You can directly create a Pod with the network tools to perform a lookup
 ```
 kubectl run --image=praqma/network-multitool dnsutils --command -- sleep infinity
 ```
+
+Then use the pod to look up the headless service:
+
+`kubectl exec dnsutils -- nslookup kubia-headless`
+
+```
+Server:         10.43.0.10
+Address:        10.43.0.10#53
+
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.42.2.17
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.42.1.19
+Name:   kubia-headless.default.svc.cluster.local
+Address: 10.42.1.18
+```
+
+Cross reference that with the pod ips:
+
+` kubectl get pods -o wide`
+
+```
+NAME                             READY   STATUS    RESTARTS   AGE     IP           NODE     NOMINATED NODE   READINESS GATES
+kubia-rv95b                      1/1     Running   0          85m     10.42.1.19   pi-3     <none>           <none>
+kubia-mjv8z                      1/1     Running   0          85m     10.42.1.18   pi-3     <none>           <none>
+kubia-gvsnw                      1/1     Running   0          85m     10.42.2.17   pi-2     <none>           <none>
+```
