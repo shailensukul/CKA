@@ -15,4 +15,11 @@ spec:
       - name: kubia
         image: luksa/kubia:arm
         ports:
-        - containerPort: 8080
+        - name: http
+          containerPort: 8080
+        readinessProbe:
+          exec:
+            command:
+            - ls
+            - /var/ready
+

@@ -506,3 +506,52 @@ Unlike a liveness probe, the container is not killed and restarted.
 ![Figure 5.11 A pod whose readiness probe fails is removed as an endpoint of a service](/images/Services-Pod-ReadinessProbe.jpg)
 
 Figure 5.11 A pod whose readiness probe fails is removed as an endpoint of a service
+
+#### Adding a readiness probe to a pod
+Edit the pod's replication controller:
+
+```
+apiVersion: v1
+...
+spec:
+...
+  template:
+    ...
+    spec:
+      containers:
+      - name: kubia
+        image: luksa/kubia
+        readinessProbe:
+          exec:
+            command:
+            - ls
+            - /var/ready
+        ...
+```
+
+The readiness probe will periodically perform `ls /var/ready` inside the container. The `ls` command 
+returns exit code zero if the file exists, or a non-zero exit code otherwise. If the file exists, the readiness probe
+will succeed, otherwise it will fail.
+
+
+Delete existing Pods and watch the `Ready` of the recreated Pods.
+
+`kubectl get pods`
+
+```
+NAME                             READY   STATUS    RESTARTS   AGE
+kubia-mjv8z                      0/1     Running   0          4m35s
+kubia-rv95b                      0/1     Running   0          4m35s
+kubia-gvsnw                      0/1     Running   0          4m35s
+```
+
+Now simulate the readiness of one of the Pods
+
+`kubectl exec kubia-2r1qb -- touch /var/ready`
+
+```
+NAME                             READY   STATUS    RESTARTS   AGE
+kubia-mjv8z                      0/1     Running   0          5m25s
+kubia-gvsnw                      0/1     Running   0          5m25s
+kubia-rv95b                      1/1     Running   0          5m25s
+```
