@@ -555,3 +555,51 @@ kubia-mjv8z                      0/1     Running   0          5m25s
 kubia-gvsnw                      0/1     Running   0          5m25s
 kubia-rv95b                      1/1     Running   0          5m25s
 ```
+
+To get more details about the readiness of a Pod, use
+```
+kubectl describe pod kubia-gvsnw
+```
+
+You can watch the active endpoints by : 
+```
+kubectl get endpoints kubia-nodeport
+```
+
+## Using a headless service for discovering individual Pods
+
+Scenario: What if a client needs to connect to all pods, or if the backiing pods themselves need to connect to all other backing pods.
+
+You can set the service `clusterIP` field to `None` in the service specification. 
+
+Then the DNS looup will return pod IPs, instead of the single service IP.
+
+### Creating a headless service
+
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubia-headless
+spec:
+  clusterIP: None // this makes the service headless
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: kubia
+```
+
+`kubectl get svc`
+
+```
+NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubia-headless             ClusterIP      None           <none>        80/TCP         7s
+```
+
+### Performing a lookup
+You can directly create a Pod with the network tools to perform a lookup
+
+```
+kubectl run --image=praqma/network-multitool dnsutils --command -- sleep infinity
+```
