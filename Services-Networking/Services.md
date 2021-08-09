@@ -630,3 +630,27 @@ kubia-rv95b                      1/1     Running   0          85m     10.42.1.19
 kubia-mjv8z                      1/1     Running   0          85m     10.42.1.18   pi-3     <none>           <none>
 kubia-gvsnw                      1/1     Running   0          85m     10.42.2.17   pi-2     <none>           <none>
 ```
+
+* Client can still to a headless service's pods, but the load balancing will be round robin.
+* Clients connect directly to the pods instead of the service proxy.
+
+### Discovering all pods - even those that aren't ready
+Add the following to the service definition:
+
+```
+kind: Service
+spec:
+  publishNotReadyAddresses: true
+```
+
+## Troubleshooting Services
+
+* Make sure that you are connecting to the service's cluster IP from within the cluster and not outside it
+* Do not ping the service IP as it is a virutal and will not respond to ping
+* If you've defined a readiness probe, make sure that it is succeeding, otherwise the pod will not be part of the service
+* Examine the endpoints to confirm that the pod is a part of the service: `kubectl get endpoints`
+* If the service FQDN is not responding, try using the cluster IP
+* Check whether you are connecting to the service port and not the target port
+* Try connecting to the pod IP directly to confirm your pod is accepting connections on the correct port
+* If you cannot access the app via the pod's direct IP, make sure that your app is not only binding to localhost
+
