@@ -1,5 +1,5 @@
 # Replication Controllers And Other Controllers
-[Back](./       ReadMe.md)
+[Back](./ReadMe.md)
 
 Pods - represent the  basic deployable unit in Kubernetes.
 
