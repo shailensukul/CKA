@@ -1,3 +1,3 @@
-# ReplicationControllersAndOtherControllers.md
-[Back](../README.md)
+# Replication Controllers And Other Controllers
+[Back](./README.md)
 

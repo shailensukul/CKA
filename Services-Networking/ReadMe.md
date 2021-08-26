@@ -3,9 +3,9 @@
 
 ## My Notes
 
-* [Replication Controllers And OtherControllers](../ReplicationControllersAndOtherControllers.md)
+* [Replication Controllers And OtherControllers](./ReplicationControllersAndOtherControllers.md)
 
-* [Services](../Services.md)
+* [Services](./Services.md)
 
 ## Sections
 
