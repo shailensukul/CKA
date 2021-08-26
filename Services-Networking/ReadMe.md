@@ -3,7 +3,7 @@
 
 ## My Notes
 
-* [Replication Controllers And OtherControllers](./ReplicationControllersAndOtherControllers.md)
+* [Replication Controllers And Other Controllers](./ReplicationControllersAndOtherControllers.md)
 
 * [Services](./Services.md)
 
