@@ -3,7 +3,7 @@
 
 Pods - represent the  basic deployable unit in Kubernetes.
 
-## Livelness Probe
+## Liveness Probe
 Kubernetes periodically checks the liveiness probe and restarts the container if the probe fails.
 
 3 mechanisms of liveness probes:
@@ -13,7 +13,7 @@ Otherwise, it is considered a failure and the container will be restarted.
 
 ```
 apiVersion: v1
-king: Pod
+kind: Pod
 metadata:
     name: kubia-liveness
 spec:
@@ -28,5 +28,5 @@ spec:
 
 * TCP Socket Probe - tries to open a TCP connection to the specified port of the container. If the connection is established successfully, the probe is successful. Otherwise, the container is restarted.
 
-* Exec Probe - executes an arbitary command inside a container and checks the command's exist code. If the status code is 0, the probe is sucessful. All other codes are considered failures.
+* Exec Probe - executes an arbitary command inside a container and checks the command's exit code. If the status code is 0, the probe is sucessful. All other codes are considered failures.
 
