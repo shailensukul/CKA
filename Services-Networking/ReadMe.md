@@ -1,6 +1,14 @@
 # 20% - Services & Networking
 [Back](../README.md)
 
+## My Notes
+
+* [Replication Controllers And OtherControllers](../ReplicationControllersAndOtherControllers.md)
+
+* [Services](../Services.md)
+
+## Sections
+
 * Understand [host networking configuration on the cluster nodes](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 * Understand [connectivity between Pods](https://kubernetes.io/docs/concepts/workloads/pods/#pod-networking)
 * Understand ClusterIP, NodePort, LoadBalancer [service](https://kubernetes.io/docs/concepts/services-networking/service/) types and endpoints

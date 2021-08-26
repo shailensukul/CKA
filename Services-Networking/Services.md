@@ -1,7 +1,8 @@
 # Services
+[Back](../README.md)
 
 Service - is a resource which provides a single, constant point of entry to a group of pods  providing the same service.
-Each service has an IP address and port that never chnage while the service exists.
+Each service has an IP address and port that never change while the service exists.
 
 ![Figure 5.1 Both internal and external clients usually connect to pods through services](/images/Services-Example.jpg)
 
@@ -163,7 +164,7 @@ or
 curl http://kubia.default.svc.cluster.local
 ```
 
-Note: You will not be able top ping a service IP because it is a virtual IP.
+Note: You will not be able to ping a service IP because it is a virtual IP.
 
 ## Connecting to services outside the cluster
 Endpoints sit in between a Service and the resource it links to.
@@ -244,7 +245,7 @@ Clients connect via the LoadBalancer IP and it redirects traffic to the node por
 * Ingress Resource - operates at the HTTP level (network layer 7) and exposes multiple services through a single IP address
 
 ### NodePort Service
-The service can be accessed by its internal IP and also through anynode's IP and the reserved node port.
+The service can be accessed by its internal IP and also through any node's IP and the reserved node port.
 
 ```
 apiVersion: v1
@@ -261,7 +262,7 @@ spec:
     app: kubia
 ```
 i
-`root@pi-1:/home/ubuntu# `kubectl get service kubia-nodeport`
+`kubectl get service kubia-nodeport`
 ```
 NAME             TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 kubia-nodeport   NodePort   10.43.72.114   <none>        80:30123/TCP   55d
@@ -648,7 +649,7 @@ spec:
 * Make sure that you are connecting to the service's cluster IP from within the cluster and not outside it
 * Do not ping the service IP as it is a virutal and will not respond to ping
 * If you've defined a readiness probe, make sure that it is succeeding, otherwise the pod will not be part of the service
-* Examine the endpoints to confirm that the pod is a part of the service: `kubectl get endpoints`
+* Examine the endpoints to confirm that the pod is a part of the service: `kubectl get endpoints <serviceName>`
 * If the service FQDN is not responding, try using the cluster IP
 * Check whether you are connecting to the service port and not the target port
 * Try connecting to the pod IP directly to confirm your pod is accepting connections on the correct port
