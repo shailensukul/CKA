@@ -1,9 +1,10 @@
 # Replication Controllers And Other Controllers
 [Back](./ReadMe.md)
 
-Pods - represent the  basic deployable unit in Kubernetes.
+## Pods
+Pods represent the  basic deployable unit in Kubernetes.
 
-## Liveness Probe
+### Liveness Probe
 Kubernetes periodically checks the liveiness probe and restarts the container if the probe fails.
 
 3 mechanisms of liveness probes:
@@ -29,4 +30,56 @@ spec:
 * TCP Socket Probe - tries to open a TCP connection to the specified port of the container. If the connection is established successfully, the probe is successful. Otherwise, the container is restarted.
 
 * Exec Probe - executes an arbitary command inside a container and checks the command's exit code. If the status code is 0, the probe is sucessful. All other codes are considered failures.
+
+### Creating an HTTP-based liveliness probe
+
+```
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: kubia-liveness
+spec:
+  containers:
+  - image: luksa/kubia-unhealthy
+    name: kubia
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 8080
+        initialDelaySeconds: 15
+```
+
+### Seeing a liveness probe in action
+```
+kubectl get pod kubia-liveness
+```
+
+```
+NAME            READY   STATUS    RESTARTS  AGE
+kubia-liveness  1/1     Running   1         2m
+```
+
+The RESTARTS column shows that the container has been restarted once.
+
+To obtain the application log of the previous crashed container:
+
+```
+kubectl logs myprod --previous
+```
+
+You can also get the reason for the container restart by:
+
+```
+kubectl describe pod kubia-liveness
+```
+
+You will get the exit code from the `describe` command above. For example, 137 signals that the process was killed by an external signal (exit code is 128 
++ 9 (SIGKILL). Likewise, exit code 143 corresponds to 128 + 15 (SIGTERM).
+
+The Kubelet on the node hosting the Pod performs the liveness probe and restarts the container, if required. However, if the node crashes, the Control Plane restarts the node and recreates the Pods. 
+
+It will not recreate the Pods, if they were created directly. To ensure it knows about them, you have to use a ReplicationController.
+
+## ReplicationController
+
 
