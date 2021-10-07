@@ -81,5 +81,12 @@ The Kubelet on the node hosting the Pod performs the liveness probe and restarts
 It will not recreate the Pods, if they were created directly. To ensure it knows about them, you have to use a ReplicationController.
 
 ## ReplicationController
+A replication controller is a Kubernetes resource whichensures that pods are running by using a label selector.
+It has 3 parts:
+* A label selector - determines what pods are in the ReplicationController's scope
+* Replica count - specifies the desired number of pods
+* Pod template - is used when creating new pod replicas
+
+![Replication Controller](/images/Services-ReplicationController.jpg)
 
 
