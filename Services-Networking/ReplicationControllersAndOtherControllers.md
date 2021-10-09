@@ -90,3 +90,25 @@ It has 3 parts:
 ![Replication Controller](/images/Services-ReplicationController.jpg)
 
 
+<pre>A YAML definition of a Replication Controller</pre>
+```
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kubia
+spec:
+  replicas: 3
+  selector: 
+    app: kubia
+  template:
+    metadata:
+      labels:
+        app: kubia
+    spec:
+      containers:
+      - name: kubia
+        image: luksa/kubia
+        ports:
+        - containerPort: 8080 
+
+```
