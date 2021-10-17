@@ -112,3 +112,43 @@ spec:
         - containerPort: 8080 
 
 ```
+
+### Replication controller commands
+
+`kubectl create -f kubia-rc.yaml`
+
+`kubectl get rc`
+
+```
+NAME    DESIRED   CURRENT   READY   AGE
+kubia   3         3         3       143d
+```
+
+```
+# list details of replication controller
+kubectl describe rc kubia
+```
+
+```
+Name:         kubia
+Namespace:    default
+Selector:     app=kubia
+Labels:       app=kubia
+Annotations:  <none>
+Replicas:     3 current / 3 desired
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=kubia
+  Containers:
+   kubia:
+    Image:        luksa/kubia:arm
+    Port:         8080/TCP
+    Host Port:    0/TCP
+    Readiness:    exec [ls /var/ready] delay=0s timeout=1s period=10s #success=1 #failure=3
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+Events:           <none>
+```
+
+
