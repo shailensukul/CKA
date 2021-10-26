@@ -162,3 +162,27 @@ kubectl get pods --all-namespaces -o wide
 ```
 kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=pi-2
 ```
+
+## Find ReplicationController for Pod
+
+```
+kubectl describe pod <podname>
+```
+
+And inspect the `Controlled By` field
+
+```
+root@pi-1:/home/ubuntu# kubectl describe pod kubia-rv95b
+Name:         kubia-rv95b
+Namespace:    default
+Priority:     0
+Node:         pi-3/192.168.86.45
+Start Time:   Sun, 08 Aug 2021 11:28:28 +0000
+Labels:       app=kubia
+Annotations:  <none>
+Status:       Running
+IP:           10.42.1.19
+IPs:
+  IP:           10.42.1.19
+Controlled By:  ReplicationController/kubia
+```
