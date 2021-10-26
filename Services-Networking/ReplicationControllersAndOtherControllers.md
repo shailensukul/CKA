@@ -152,3 +152,13 @@ Events:           <none>
 ```
 
 
+### List Nodes and Pods
+
+```
+kubectl get pods --all-namespaces -o wide
+```
+
+### List Pods on a Specific Node
+```
+kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=pi-2
+```
