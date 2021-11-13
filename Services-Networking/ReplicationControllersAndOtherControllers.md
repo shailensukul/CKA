@@ -186,3 +186,67 @@ IPs:
   IP:           10.42.1.19
 Controlled By:  ReplicationController/kubia
 ```
+
+## Label Pods
+
+```
+kubectl label pod kubia-rv95b type=special
+```
+
+```
+kubia get pods --show-labels
+```
+
+```
+kubia-mjv8z                      1/1     Running   0          90d    app=kubia
+kubia-gvsnw                      1/1     Running   0          90d    app=kubia
+kubia-rv95b                      1/1     Running   0          90d    app=kubia,type=special
+```
+
+## Change label of a managed pod
+```
+kubectl label pod kubia-rv95b app=foo --overwrite
+```
+
+## Changing the Replication Controller's Pod Template
+
+Changing a ReplicationController's pod template only affects pods created afterward and has no effect on existing pods.
+
+```
+## Edit ReplicationController
+kubectl edit rc kubia
+```
+
+Find the pod template section and add an additional label to the metadata. 
+```
+spec:
+  replicas: 3
+  selector:
+    app: kubia
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kubia
+        app: kubia2 # add another label
+```
+
+```
+## Delete an existing pods
+kubectl delete pod kubia-frwkl
+```
+
+```
+kubectl get pods --show-labels
+```
+
+## Edit the Replication Controller
+```
+kubectl edit rc kubia
+```
+
+## Delete Replication Controller  
+```
+# Delete the replication controller but leave the pods
+kubectl delete rc kubia --cascade=false
+```
