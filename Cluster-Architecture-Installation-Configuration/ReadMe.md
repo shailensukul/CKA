@@ -15,6 +15,15 @@
 
 [Kubecon Europe 2020: Kubeadm deep dive](https://www.youtube.com/watch?v=DhsFfNSIrQ4&feature=youtu.be)
 
+
+# Installation
+
+To initialize the control-plane node run:
+
+```
+kubeadm init <args>
+```
+
 sample commands used during backup/restore/update of nodes
 
 ```
