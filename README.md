@@ -1,5 +1,3 @@
-![Kubernetes Cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)
-
 # CKA
 Certified Kubernetes Administrator V 1.19
 
