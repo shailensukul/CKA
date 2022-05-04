@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-05-04T09:41:03.575Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36 Edg/101.0.1210.32" etag="BwqYh9abAcbVRGYSgRag" version="15.4.0" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2022-05-04T09:41:20.104Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36 Edg/101.0.1210.32" etag="uGUjFOZuNJqvAU9a-g2W" version="15.4.0" type="github" pages="5">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Ingress">
     <mxGraphModel dx="782" dy="466" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -447,9 +447,6 @@
         </mxCell>
         <mxCell id="iQB5mj7Q1hyi2Ag_UBMe-18" value="Load Balancer&lt;br&gt;Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="iQB5mj7Q1hyi2Ag_UBMe-1">
           <mxGeometry x="74" y="320" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="iQB5mj7Q1hyi2Ag_UBMe-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=1;" edge="1" parent="iQB5mj7Q1hyi2Ag_UBMe-1" source="iQB5mj7Q1hyi2Ag_UBMe-18" target="iQB5mj7Q1hyi2Ag_UBMe-18">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="iQB5mj7Q1hyi2Ag_UBMe-20" value="Is a type of service" style="endArrow=classic;html=1;rounded=0;fontSize=1;edgeStyle=orthogonalEdgeStyle;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="iQB5mj7Q1hyi2Ag_UBMe-1" source="iQB5mj7Q1hyi2Ag_UBMe-10" target="iQB5mj7Q1hyi2Ag_UBMe-18">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
