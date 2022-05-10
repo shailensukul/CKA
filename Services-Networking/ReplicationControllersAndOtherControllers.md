@@ -4,6 +4,9 @@
 ## Pods
 Pods represent the  basic deployable unit in Kubernetes.
 
+## [Replication Controller](https://kubernetes.io/docs/concepts/workloads/controllers/replicationcontroller/)
+A ReplicationController ensures that a specified number of pod replicas are running at any one time. In other words, a ReplicationController makes sure that a pod or a homogeneous set of pods is always up and available.
+
 ### Liveness Probe
 Kubernetes periodically checks the liveiness probe and restarts the container if the probe fails.
 
