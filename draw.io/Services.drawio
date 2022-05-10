@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-05-10T10:40:07.299Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36 Edg/101.0.1210.39" etag="7HH10VVhBwov8BQoVjy5" version="18.0.1" type="github" pages="6">
+<mxfile host="app.diagrams.net" modified="2022-05-10T10:48:08.047Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36 Edg/101.0.1210.39" etag="kwmaFhWtHu2GXIbECu9r" version="18.0.1" type="github" pages="6">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Ingress">
     <mxGraphModel dx="782" dy="466" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -380,13 +380,79 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="tjknD7djUR3KsoTc9xAA-1" value="Start" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="210" y="30" width="80" height="30" as="geometry" />
+          <mxGeometry x="269" y="20" width="80" height="30" as="geometry" />
         </mxCell>
         <mxCell id="tjknD7djUR3KsoTc9xAA-2" value="Find pods matching the label selector" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="190" y="110" width="120" height="60" as="geometry" />
+          <mxGeometry x="250" y="110" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="tjknD7djUR3KsoTc9xAA-3" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Compare&lt;br style=&quot;font-size: 14px;&quot;&gt;matched vs.&lt;br style=&quot;font-size: 14px;&quot;&gt;desired pod count&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;" vertex="1" parent="1">
-          <mxGeometry x="190" y="210" width="150" height="130" as="geometry" />
+        <mxCell id="tjknD7djUR3KsoTc9xAA-3" value="&lt;font face=&quot;Times New Roman&quot; style=&quot;font-size: 14px;&quot;&gt;Compare&lt;br style=&quot;font-size: 14px;&quot;&gt;matched vs.&lt;br style=&quot;font-size: 14px;&quot;&gt;desired pod count&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="230" y="210" width="160" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-4" value="Delete the excess pods" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="503" y="255" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-5" value="Create additional pods from current template" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="10" y="255" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-6" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-1" target="tjknD7djUR3KsoTc9xAA-12">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="190" as="sourcePoint" />
+            <mxPoint x="400" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-7" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-2" target="tjknD7djUR3KsoTc9xAA-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="190" as="sourcePoint" />
+            <mxPoint x="400" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-8" value="Too many" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-3" target="tjknD7djUR3KsoTc9xAA-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="190" as="sourcePoint" />
+            <mxPoint x="400" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-9" value="Just enough" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-3" target="tjknD7djUR3KsoTc9xAA-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="130" y="360" as="sourcePoint" />
+            <mxPoint x="180" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-10" value="Too few" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-3" target="tjknD7djUR3KsoTc9xAA-5">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="190" as="sourcePoint" />
+            <mxPoint x="400" y="140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-11" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="305" y="410" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-12" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="304" y="80" width="10" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-13" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-12" target="tjknD7djUR3KsoTc9xAA-2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="280" as="sourcePoint" />
+            <mxPoint x="400" y="230" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-18" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-5" target="tjknD7djUR3KsoTc9xAA-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="280" as="sourcePoint" />
+            <mxPoint x="260" y="415" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="70" y="415" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tjknD7djUR3KsoTc9xAA-19" value="" style="endArrow=classic;html=1;rounded=0;fontFamily=Times New Roman;fontSize=14;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tjknD7djUR3KsoTc9xAA-4" target="tjknD7djUR3KsoTc9xAA-11">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="280" as="sourcePoint" />
+            <mxPoint x="280" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="563" y="415" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
