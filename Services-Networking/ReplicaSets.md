@@ -1,8 +1,10 @@
 # ReplicaSets
 
-ReplicaSets are a new generation of ReplicationController and replaces it completeley.
+[ReplicaSets](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/) are a new generation of ReplicationController and replaces it completeley.
 
 A ReplicaSet behaves exactly like a ReplicationController, *but it has more expressive pod selectors*.
+
+A ReplicaSet is linked to its Pods via the Pods' **metadata.ownerReferences** field
 
 Label selector operators:
 * In - Label's value must match one of the specified values

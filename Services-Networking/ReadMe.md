@@ -9,6 +9,8 @@
 
 * [ReplicaSets](./ReplicaSets.md)
 
+* [DeamonSets](./DaemonSets.md)
+
 ## Sections
 
 * Understand [host networking configuration on the cluster nodes](https://kubernetes.io/docs/concepts/cluster-administration/networking/)

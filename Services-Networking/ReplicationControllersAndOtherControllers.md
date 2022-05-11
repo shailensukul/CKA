@@ -34,7 +34,7 @@ spec:
 
 * Exec Probe - executes an arbitary command inside a container and checks the command's exit code. If the status code is 0, the probe is sucessful. All other codes are considered failures.
 
-### Creating an HTTP-based liveliness probe
+### Creating an HTTP-based liveness probe
 
 ```
 apiVersion: v1
@@ -49,7 +49,7 @@ spec:
       httpGet:
         path: /
         port: 8080
-        initialDelaySeconds: 15
+        initialDelaySeconds:  // wait 15 seconds before executing the first probe
 ```
 
 ### Seeing a liveness probe in action
@@ -84,14 +84,19 @@ The Kubelet on the node hosting the Pod performs the liveness probe and restarts
 It will not recreate the Pods, if they were created directly. To ensure it knows about them, you have to use a ReplicationController.
 
 ## ReplicationController
-A replication controller is a Kubernetes resource whichensures that pods are running by using a label selector.
+
+A replication controller is a Kubernetes resource which ensures that pods are running by using a label selector.
+
+## Replication Controller Logic
+
+![Replication Controller Logic](/images/Services-ReplicationControllerLogic.jpg)
+
 It has 3 parts:
 * A label selector - determines what pods are in the ReplicationController's scope
 * Replica count - specifies the desired number of pods
 * Pod template - is used when creating new pod replicas
 
 ![Replication Controller](/images/Services-ReplicationController.jpg)
-
 
 <pre>A YAML definition of a Replication Controller</pre>
 ```

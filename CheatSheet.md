@@ -82,10 +82,27 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | DIAGNOSTICS | |
 | kubectl logs kubia-manual | Get logs of a running process |
 | kubectl port-forward kubia-manual 8888:8080 | Forward a local port to a specific node for debugging |
+| kubectl logs kubia --previous| Get application logs of the previous crashed container |
+| kubectl describe pod kubia | Gets the reason for why a container was restarted |
 | DELETE | |
 | kubectl delete pod custom-pod | Delete a pod | 
 | kubectl delete pod -l creation_method=manual | Delete pods using label selectors |
 | kubectl delete ns custom-namespace | Delete a namespace along with all its pods |
 | kubectl delete pod -all | Delete all pods but keep the namespace |
 | kubectl delete all -all | Delete all pods and the ReplicationController |
+| REPLICATION CONTROLLER | *Are deprecated* |
+| kubectl get rc | Get Replication Controller |
+| kubectl describe rc kubia-rc | Describe the Replication Controller |
+| kubectl edit rc kubia-rc | Open the ReplicationController's YAML file in the text editor |
+| kubectl scale rc kubia-rc --replicas=3 | Scale the ReplicationController |
+| kubectl delete rc kubia-rc | Delete the ReplicationController and all its Pods |
+| kubectl delete rc kubia-rc --cascade=false | Delete the ReplicationController but leave all its Pods |
+| REPLICASETS | *More expressive than a ReplicationController* |
+| kubectl get rc kubia-rs | Get ReplicaSet |
+| kubectl describe rc kubia-rs | Describe the ReplicaSet in more detail |
+| kubectl delete rs kubia | Delete the ReplicaSet |
+| DAEMONSET | *One pod per node* |
+| kubectl get ds | Gets all DeamonSets |
+| kubectl label node myNode disk=ssd | Label the node so that it can picked by the DaemonSet selector |
+
 
