@@ -104,5 +104,14 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | DAEMONSET | *One pod per node* |
 | kubectl get ds | Gets all DeamonSets |
 | kubectl label node myNode disk=ssd | Label the node so that it can picked by the DaemonSet selector |
+| JOBS | |
+| kubectl get jobs | Gets running job |
+| kubectl get pods --show-all | Shows the completed pod for the job. They are not deleted after they complete |
+| kubectl logs batch-job-28gfq | Get the logs for the pod that the job created |
+| kubectl describe job batch-job | Check on the status of the job |
+| kubectl delelte job batch-job | Delete a job |
+| kubectl scale job batch-job --replicas=3 | Runs 3 pods in parallel |
+
+
 
 
