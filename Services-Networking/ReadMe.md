@@ -7,6 +7,8 @@
 
 * [Services](./Services.md)
 
+* [Deployments](./Deployments.md)
+
 * [ReplicaSets](./ReplicaSets.md)
 
 * [DeamonSets](./DaemonSets.md)

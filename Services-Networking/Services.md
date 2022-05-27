@@ -1,8 +1,8 @@
 # Services
 [Back](./ReadMe.md)
 
-Service - is a resource which provides a single, constant point of entry to a group of pods  providing the same service.
-Each service has an IP address and port that never change while the service exists.
+An abstract way to expose an application running on a set of Pods as a network service.
+Kubernetes gives Pods their own IP addresses and a single DNS name for a set of Pods, and can load-balance across them.
 
 ![Figure 5.1 Both internal and external clients usually connect to pods through services](/images/Services-Example.jpg)
 
