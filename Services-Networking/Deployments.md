@@ -64,7 +64,6 @@ Or edit the deployment template and update `.spec.template.spec.containers[0].im
 
 `kubectl edit deployment/nginx-deployment`
 
-
 Describe Deployments
 `kubectl describe deployments`
 

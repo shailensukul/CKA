@@ -111,6 +111,15 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl describe job batch-job | Check on the status of the job |
 | kubectl delelte job batch-job | Delete a job |
 | kubectl scale job batch-job --replicas=3 | Runs 3 pods in parallel |
+| DEPLOYMENTS | |
+| Create a deployment | `kubectl apply -f nginx-deployment.yaml` |
+| Check status of deployments | `kubectl get deployments` |
+| Check deployment rollout status | `kubectl rollout status deployment/nginx-deployment` |
+| Update the deployment image | `kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1` |
+| Describe Deployments | `kubectl describe deployments` |
+| Pause Deployment | `kubectl rollout pause deployment/nginx-deployment` |
+| Resume Deployment | `kubectl rollout resume deployment/nginx-deployment` |
+| Show Deployment history | `kubectl rollout history deployment/nginx-deployment`|
 
 
 
