@@ -120,6 +120,15 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Pause Deployment | `kubectl rollout pause deployment/nginx-deployment` |
 | Resume Deployment | `kubectl rollout resume deployment/nginx-deployment` |
 | Show Deployment history | `kubectl rollout history deployment/nginx-deployment`|
+| SERVICES | | 
+| Create service | ` kubectl create -f kubia-svc.yaml` | 
+| Get services | `kubectl get service` | 
+| Describe the service | `kubectl describe svc kubia` | 
+| | | 
+| | | 
+| | | 
+| | | 
+| | | 
 
 
 

@@ -6,6 +6,55 @@ Kubernetes gives Pods their own IP addresses and a single DNS name for a set of 
 
 ![Figure 5.1 Both internal and external clients usually connect to pods through services](/images/Services-Example.jpg)
 
+Sample service file:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app.kubernetes.io/name: proxy
+spec:
+  containers:
+  - name: nginx
+    image: nginx:stable
+    ports:
+      - containerPort: 80
+        name: http
+      - containerPort: 8443
+        name: https
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app.kubernetes.io/name: proxy
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: http
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: https
+```
+
+## Discovering Services
+
+`kubectl exec kubia-3inly env`
+
+Shows service names and ports
+```
+KUBIA_SERVICE_HOST=10.111.249.153
+KUBIA_SERVICE_PORT=80
+
+KUBERNETES_SERVICE_HOST=10.111.249.153
+KUBERNETES_SERVICE_POST=443
+```
 
 * Create the service
 ```
