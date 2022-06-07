@@ -75,11 +75,18 @@ kubectl describe svc kubia
 ```
 # Get the pod
 kubectl get pods
-
-# Execute a curl on the pod shell
-kubectl exec kubia-qwgfq -- curl -s http://10.99.46.75
-
 ```
+
+## Execute a curl on the pod shell
+```
+kubectl exec kubia-qwgfq -- curl -s http://10.99.46.75
+```
+
+## Open a bash shell in the pod
+```
+kubectl exec -it kubia-qwgfq -- bash
+```
+
 
 Endpoints - is a list of IP addresses and ports exposing a service
 
@@ -215,13 +222,37 @@ curl http://kubia.default.svc.cluster.local
 
 Note: You will not be able to ping a service IP because it is a virtual IP.
 
-## Connecting to services outside the cluster
+## Services without Selectors
+
+Services most commonly abstract access to Kubernetes Pods thanks to the selector, but when used with a corresponding Endpoints object and without a selector, the Service can abstract other kinds of backends, including ones that run outside the cluster. 
+
+For example:
+
+* You want to have an external database cluster in production, but in your test environment you use your own databases.
+* You want to point your Service to a Service in a different Namespace or on another cluster.
+* You are migrating a workload to Kubernetes. While evaluating the approach, you run only a portion of your backends in Kubernetes.
+
+In any of these scenarios you can define a Service without a Pod selector. For example:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9376
+```
+
 Endpoints sit in between a Service and the resource it links to.
 You can get endpoints by:
 
 `kubectl describe service kubia`
 
-## EndPoints
+# EndPoints
+
 *Endpoints* is a list of IP addressses and ports exposing a service.
 
 Get endpoints:

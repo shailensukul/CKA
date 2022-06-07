@@ -124,7 +124,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Create service | ` kubectl create -f kubia-svc.yaml` | 
 | Get services | `kubectl get service` | 
 | Describe the service | `kubectl describe svc kubia` | 
-| | | 
+| Delete service | `kubectl delete service kubia` | 
 | | | 
 | | | 
 | | | 
