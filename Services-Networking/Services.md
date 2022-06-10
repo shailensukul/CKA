@@ -246,12 +246,31 @@ spec:
       targetPort: 9376
 ```
 
+Because this Service has no selector, the corresponding Endpoints object is not created automatically. You can manually map the Service to the network address and port where it's running, by adding an Endpoints object manually:
+
+```yaml
+apiVersion: v1
+kind: Endpoints
+metadata:
+  # the name here should match the name of the Service
+  name: my-service
+subsets:
+  - addresses:
+      - ip: 192.0.2.42
+    ports:
+      - port: 9376
+```
+
+![Figure 5.4: Pods consuming a service with two external endpoints](/images/Endpoints.jpg)
+
+Accessing a Service without a selector works the same as if it had a selector. In the example above, traffic is routed to the single endpoint defined in the YAML: `192.0.2.42:9376` (TCP).
+
 Endpoints sit in between a Service and the resource it links to.
 You can get endpoints by:
 
 `kubectl describe service kubia`
 
-# EndPoints
+### EndPoints
 
 *Endpoints* is a list of IP addressses and ports exposing a service.
 
@@ -260,115 +279,104 @@ Get endpoints:
 kubectl get endpoints <servicename>
 ```
 
-Note: If you create a service without a selector, it will not create any endpoints.
+## Service Types
 
-### External Service
+For some parts of your application (for example, frontends) you may want to expose a Service onto an external IP address, that's outside of your cluster.
+Kubernetes `ServiceTypes` allow you to specify what kind of Service you want. The default is `ClusterIP`.
 
-The following service definition does not create any endpoints:
-```
+`Type` values and their behaviors are:
+
+* `ClusterIP`: Exposes the Service on a cluster-internal IP. Choosing this value makes the Service only reachable from within the cluster. This is the default `ServiceType`.
+
+* `NodePort`: Exposes the Service on each Node's IP at a static port (the `NodePort`). A `ClusterIP` Service, to which the NodePort Service routes, is automatically created. You'll be able to contact the `NodePort` Service, from outside the cluster, by requesting `<NodeIP>:<NodePort>`.
+
+* `LoadBalancer`: Exposes the Service externally using a cloud provider's load balancer. `NodePort` and `ClusterIP` Services, to which the external load balancer routes, are automatically created.
+
+* `ExternalName`: Maps the Service to the contents of the `externalName` field (e.g. `foo.bar.example.com`), by returning a `CNAME` record with its value. No proxying of any kind is set up.
+
+
+## Type NodePort
+
+If you set the type field to `NodePort`, the Kubernetes control plane allocates a port from a range specified by `--service-node-port-range` flag (default: 30000-32767). Each node proxies that port (the same port number on every Node) into your Service. Your Service reports the allocated port in its `.spec.ports[*].nodePort` field.
+
+Using a NodePort gives you the freedom to set up your own load balancing solution, to configure environments that are not fully supported by Kubernetes, or even to expose one or more nodes' IPs directly.
+
+Note that this Service is visible as `<NodeIP>:spec.ports[*].nodePort` and `.spec.clusterIP:spec.ports[*].port`. If the `--nodeport-addresses` flag for kube-proxy or the equivalent field in the kube-proxy configuration file is set, `<NodeIP>` would be filtered node IP(s).
+
+Example:
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
-    name: external-service
+  name: my-service
 spec:
-    ports:
+  type: NodePort
+  selector:
+    app: MyApp
+  ports:
+      # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
     - port: 80
+      targetPort: 80
+      # Optional field
+      # By default and for convenience, the Kubernetes control plane will allocate a port from a range (default: 30000-32767)
+      nodePort: 30007
 ```
 
-Here is how to create an endpoint:
+## Type ExternalName Service
 
-The Endpoints object needs to have the same name as the Service.
-```
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: external-service
-subsets: 
-  - addresses:
-    - ip: 11.11.11.11
-    - pi: 22.22.22.22
-    ports:
-      port: 80
-```
-![Figure 5.4: Pods consuming a service with two external endpoints](/images/Endpoints.jpg)
+Services of type ExternalName map a Service to a DNS name, not to a typical selector such as my-service or cassandra. You specify these Services with the spec.externalName parameter.
 
-## ExternalName Service
-```
+This Service definition, for example, maps the my-service Service in the prod namespace to my.database.example.com
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-service
+  name: my-service
+  namespace: prod
 spec:
   type: ExternalName
-  externalName: someapi.somecompany.com
-  ports:
-  - port: 80
+  externalName: my.database.example.com
 ```
-
-Clients can then connect to external-service.default.svc.cluster.local
-
-ExternalName services are implemented solely at the DNS level - a CNAME DNS is record is created for the service.
-Clients will connect to the external service directly, bypassing the service proxy completely.
-
-This is why ExternalName services do not get a CLuster IP.
-
-## Exposing Services to External Clients
 
 ![Figure 5.5: Exposing a service to external clients](/images/Services-Expose-Service.jpg)
 
-* NodePort service type - each cluster node opens a port on the node itself and redirects traffic received on that port to the underlying service. 
-Service is available in the internal cluster IP, but also a dedicated port on all nodes.
+When looking up the host `my-service.prod.svc.cluster.local`, the cluster DNS Service returns a `CNAME` record with the value `my.database.example.com`. 
+Accessing `my-service` works in the same way as other Services but with the crucial difference that redirection happens at the DNS level rather than via proxying or forwarding. 
 
-* LoadBalancer service type - makes the service available through a dedicated load balancer, provisioned from the Cloud infrastructure Kubernetes is running on.
-Clients connect via the LoadBalancer IP and it redirects traffic to the node port across all nodes.
+Should you later decide to move your database into your cluster, you can start its Pods, add appropriate selectors or endpoints, and change the Service's type.
 
-* Ingress Resource - operates at the HTTP level (network layer 7) and exposes multiple services through a single IP address
+> **Warning:**
+>
+> You may have trouble using ExternalName for some common protocols, including HTTP and HTTPS. If you use ExternalName then the hostname used by clients inside your cluster is different from the name that > the ExternalName references.
+>
+> For protocols that use hostnames this difference may lead to errors or unexpected responses. HTTP requests will have a `Host:` header that the origin server does not recognize; TLS servers will not be  able to provide a certificate matching the hostname that the client connected to.
 
-### NodePort Service
-The service can be accessed by its internal IP and also through any node's IP and the reserved node port.
+## External IPs
 
-```
+If there are external IPs that route to one or more cluster nodes, Kubernetes Services can be exposed on those `externalIPs`. 
+Traffic that ingresses into the cluster with the external IP (as destination IP), on the Service port, will be routed to one of the Service endpoints. externalIPs are not managed by Kubernetes and are the responsibility of the cluster administrator.
+
+In the Service spec, `externalIPs` can be specified along with any of the ServiceTypes. 
+In the example below, "`my-service`" can be accessed by clients on "`80.11.12.10:80`" (`externalIP:port`)
+
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: kubia-nodeport
+  name: my-service
 spec:
-  type: NodePort
-  ports:
-  - port: 80
-    targetPort: 8080
-    nodePort: 30123
   selector:
-    app: kubia
-```
-i
-`kubectl get service kubia-nodeport`
-```
-NAME             TYPE       CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
-kubia-nodeport   NodePort   10.43.72.114   <none>        80:30123/TCP   55d
-```
-
-The External-IP shows `<nodes>` indicating that the service is accessible through the IP address of any cluster node.
-The Port(s) column shows both the internal port of the cluster IP (80) and the node port (30123).
-
-The service is available at the following addresses:
-
-* 10.43.72.114:80
-* <1st node's IP>:30123
-* <2nd node's IP>:30123
-
-![Figure 5.6: An external client connecting to a NodePort service either through Node 1 or 2](/images/Services-NodePort.jpg)
-
-#### Changing firewall rules to let external clients access the NodePort service
-
-```
-gcloud compute firewall-rules create kubia-svc-rule --allow=tcp:30123
+    app: MyApp
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 9376
+  externalIPs:
+    - 80.11.12.10
 ```
 
-Now you can access your nodes externally on port 30123, you need to work out the IP of the node:
-```
-kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
-```
 
 ### Load Balancer Service
 
