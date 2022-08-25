@@ -597,6 +597,7 @@ Unlike a liveness probe, the container is not killed and restarted.
 Figure 5.11 A pod whose readiness probe fails is removed as an endpoint of a service
 
 #### Adding a readiness probe to a pod
+
 Edit the pod's replication controller:
 
 ```
@@ -687,6 +688,7 @@ kubia-headless             ClusterIP      None           <none>        80/TCP   
 ```
 
 ### Performing a lookup
+
 You can directly create a Pod with the network tools to perform a lookup
 
 ```
@@ -724,6 +726,7 @@ kubia-gvsnw                      1/1     Running   0          85m     10.42.2.17
 * Clients connect directly to the pods instead of the service proxy.
 
 ### Discovering all pods - even those that aren't ready
+
 Add the following to the service definition:
 
 ```

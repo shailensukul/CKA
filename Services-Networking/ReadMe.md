@@ -9,7 +9,9 @@
     - With Selectors - Service is accessible via its ClusterIP and defined port
     - Without Selectors 
         - Endpoints are not created automatically. Endpoints can be created by specifying a name the same as the service name
-         EndpointSlices - an EndpointSlice contains references to a set of network endpoints.EndpointSlices group network endpoints together by unique combinations of protocol, port number, and Service name.
+         EndpointSlices - an EndpointSlice contains references to a set of network endpoints.        
+         
+         EndpointSlices group network endpoints together by unique combinations of protocol, port number, and Service name.
     - 
 
 * [Deployments](./Deployments.md)
