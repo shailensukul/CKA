@@ -127,7 +127,11 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Delete service | `kubectl delete service kubia` | 
 | ENDPOINTS | | 
 | Get service endpoints | `kubectl get endpoints <servicename>` | 
-| | | 
+| VOLUMES | | 
+| Get persistence volumes  | `kubectl get pv` |
+| Get persistent volume claims | `kubectl get pvc` |
+| List storage classes | `kubectl get sc`  |
+| | |
 | | | 
 
 
