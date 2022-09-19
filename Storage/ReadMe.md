@@ -79,3 +79,31 @@ Useful for sharing data between containers running on the same pod
 * `cinder`, `cephfs`, `iscsi`, `flocker`, `glusterfs`, `quobyte`, `rbd`, `flexVolume`, `vsphere-Volume`, `photonPersistenDisk`, `scaleIO` - mounting other types of network storage
 * `configMap`, `secret`, `downwardAPI` - special types of volumes used to expose certain Kubernetes resources & cluster information to the pod
 * `persistentVolumeClaim` - a way to use a pre or dynamically provisioned persistent storage
+
+## Storage Class
+Before a user can create a PersistentVolumeClaim, which will result in a new PersistentVolme being provisioned, an admin needs to create one or more StorageClass resources.
+The StorageClass resource specifies which provisioner should be used for provisioning the PersistentVolume when a PersistentVOlumeClaim requests this StorageClass.
+
+```
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-ssd
+  sone: europe-west1-b
+```
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc
+spec:
+  storageClassName: fast
+  resources:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+```
