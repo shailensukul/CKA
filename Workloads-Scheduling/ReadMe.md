@@ -22,3 +22,90 @@
     -   [Install service catalog using helm](https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/)
         -   Non-k8s.io resource: CNCF Kubecon video: [An introduction to Helm - Bridget Kromhout, Microsoft & Marc Khouzam, City of Montreal](https://youtu.be/x2w6T0sE50w?list=PLj6h78yzYM2O1wlsM-Ma-RYhfT5LKq0XC)
     -   Non-k8s.io resource: External resource: [templating-yaml-with-code](https://learnk8s.io/templating-yaml-with-code)
+
+## ConfigMaps and Secrets
+
+ConfigMap is a map containing key/value pairs with values ranging from literals to full config files.
+The contents of a ConfigMap are passed to containers as either environment variables or as files in a volume.
+
+```
+apiVersion: v1
+data:
+    sleep-interval: "25"
+kind: ConfigMap
+metadata:
+    name: fortune-config
+    namespace: default
+```
+
+Create the ConfigMap
+`kubectl create -f fortune-config.yaml`
+
+Creating ConfigMap from a file.
+kubectl will create an individual map entry for each file in the specified directory, but only for files whose name is a valid ConfigMap key.
+
+`kubectl create configmap my-config --from-file=/path/to/dir`
+
+```
+kubectl create configmap myconfig
+--from-file=foo.json // a single file
+--from-file=bar=fobar.conf // a file stored under a custom key
+--from-file=config-opts/ // a whole directory
+--from-literal=some=thing // a literal value
+```
+
+
+Pass ConfigMap to Pod
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+    name: fortune-env-from-configmap
+spec:
+    containers:
+    - image: luksa/fortune:env
+    env:
+    - name: INTERVAL
+    valueFrom:
+        configMapKeyRef:
+            name: fortune-config
+            key: sleep-interval
+            optional: false // if optional is true, the container will start even if the ConfigMap does not exist
+```
+
+Mapp all values from a ConfigMap to the Pod
+
+```
+...
+spec:
+    containers:
+    - image: some-image
+    envFrom: // Use envForm instead of emv
+    - prefix: CONFIG_ // Optional. All environment variables will be prefixed with CONFIG_
+      configMapRef:
+        name: my-config-map // Name of ConfigMap
+...
+```
+
+Referencing environment variables as arguments
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+    name: fortune-env-from-configmap
+spec:
+    containers:
+    - image: luksa/fortune:env
+    env:
+    - name: INTERVAL
+    valueFrom:
+        configMapKeyRef:
+            name: fortune-config
+            key: sleep-interval
+            optional: false // if optional is true, the container will start even if the ConfigMap does not exist
+
+    args: ["$(INTERVAL)"]
+```
+
