@@ -135,7 +135,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 |  Attach to a process that is already running inside an existing container | `kubectl attach POD -c CONTAINER` | 
 |  Execute a command in a container (creates an additional procewss) | `kubectl exec POD [-c CONTAINER] -- COMMAND [args...]` | 
 | Forward one or more local ports to a pod | `kubectl port-forward POD [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N]`<br>ex `# Listen on port 8888 locally,forwarding to 5000 in the pod` <br>`kubectl port-forward mypod 8888:5000` | 
-| | | 
+| List components and their statuses | kubectl get componentstatuses | 
 | | | 
 | | | 
 
