@@ -80,6 +80,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl create namespace custom-namespace | Create namespace |
 | kubectl create -f kubia-manual.yaml -n custom-namespace | Create a pod in a namespace or add namespace: custom-namespace in the metadata section of YAML|
 | DIAGNOSTICS | |
+| `kubectl run test --image=luksa/kubectl-proxy -n foo` | Create and run a particular image, in a namespace. Creates a deployment or job to manage the created container(s). |
 | kubectl logs kubia-manual | Get logs of a running process |
 | kubectl port-forward kubia-manual 8888:8080 | Forward a local port to a specific node for debugging |
 | kubectl logs kubia --previous| Get application logs of the previous crashed container |
@@ -140,5 +141,11 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Get service accounts | `kubectl get sa` | 
 | SECRETS | | 
 | Get secrets | `kubectl get secrets` | 
+| NAMESPACE | |
+| Get namespace | `kubectl get ns` |
+| Create namespace | `kubectl create ns foo` |
+| DISABLE RBAC| |
+| Disable RBAC | `kubectl delete clusterrolebinding permissive-binding` |
+| | |
 
 
