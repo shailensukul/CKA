@@ -146,6 +146,13 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Create namespace | `kubectl create ns foo` |
 | DISABLE RBAC| |
 | Disable RBAC | `kubectl delete clusterrolebinding permissive-binding` |
-| | |
-
+| ROLE| |
+| Create a role | `kubectl create role service-reader --verb=get --verb==list --resources=services -n bar` |
+| Get roles | `kubectl get roles` |
+| ROLE BINDING | |
+| Create role binding | `kubectl create rolebinding test --role=service-reader --serviceaccount=foo:default -n foo` |
+| To bind a Role to a user instead of ServiceAccount, use the --user argument. To bind it to a group, use --group| |
+| Get role binding | `kubectl get rolebinding test -n foo -o yaml` |
+| Role binding references a SINGLE role | |
+| Role binding can reference multiple subjects| |
 
