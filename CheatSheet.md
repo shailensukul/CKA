@@ -138,7 +138,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | List components and their statuses | kubectl get componentstatuses | 
 | SERVICE ACCOUNTS| | 
 | Get service accounts | `kubectl get sa` | 
-| | | 
-| | | 
+| SECRETS | | 
+| Get secrets | `kubectl get secrets` | 
 
 
