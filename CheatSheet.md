@@ -159,8 +159,9 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Create a cluster role | `kubectl create clusterrole pv-reader --verb=get,list --resource=persistentvolumes` |
 | Get cluster role | `kubectl get clusterrole pv-reader -o yaml` |
 | Get cluster roles | `kubectl get clusterroles` |
+| Get cluster role | `kubectl get clusterrole view -o yaml` |
 | CLUSTER ROLE BINDING | |
 | Create cluster role binding | `kubectl create clusterrolebinding pv-test --clusterrole=pv-reader --serviceaccount=foo:default` |
 | Get clusterrolebings | `kubectl get clusterrolebindings` |
-| | |
+| Delete clusterrolebinding | `kubectl delete clusterrolebinding pv-test` |
 
