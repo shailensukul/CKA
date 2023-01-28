@@ -164,4 +164,15 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Create cluster role binding | `kubectl create clusterrolebinding pv-test --clusterrole=pv-reader --serviceaccount=foo:default` |
 | Get clusterrolebings | `kubectl get clusterrolebindings` |
 | Delete clusterrolebinding | `kubectl delete clusterrolebinding pv-test` |
+| POD SECURITY POLICY| |
+| Get pod security policy | `kubectl get psp` |
+| Bind pod security policy to a cluster role | `kubectl create clusterrole psp-privileged --verb=use --resource=podsecuritypolicies --resource-name=privileged` |
+| CREATING ADDITIONAL USERS| |
+| Create a user | `kubectl config set-credentials alice --username=alice --password=password` |
+| Create pod as a different user | `kubectl --user alice create -f pod.yaml` |
+| NETWORK POLICY  | |
+| | |
+| | |
+| | |
+| | |
 
