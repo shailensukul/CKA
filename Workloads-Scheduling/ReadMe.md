@@ -74,14 +74,14 @@ spec:
             optional: false // if optional is true, the container will start even if the ConfigMap does not exist
 ```
 
-Mapp all values from a ConfigMap to the Pod
+Map all values from a ConfigMap to the Pod
 
 ```
 ...
 spec:
     containers:
     - image: some-image
-    envFrom: // Use envForm instead of emv
+    envFrom: // Use envForm instead of env
     - prefix: CONFIG_ // Optional. All environment variables will be prefixed with CONFIG_
       configMapRef:
         name: my-config-map // Name of ConfigMap
@@ -109,3 +109,49 @@ spec:
     args: ["$(INTERVAL)"]
 ```
 
+First create a ConfigMap from a directory (configmap-files):
+
+```
+kubectl create configmap fortune-config --from-files=configmap-files
+```
+
+Then create a pod with ConfigMap entries mounted as files:
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+    name: fortune-configmap-volume
+spec:
+    containers:
+    - image: ngix-alpine
+      name: web-server
+      volumeMounts:
+      - name: config
+       mountPath: /etc/nginx/conf.d # files are mounted to this directory
+       subPath: myconfig.conf # instead of mounting the whole volume, you are only mounting this file. Other files in the container's volume will also show up
+       readOnly: true
+    volumes:
+    - name: config
+      configMap:
+        name: fortune-config
+        items:                      # Selecting which items to include in the volume
+        - key: my-nginx-config.conf # You want the entry under this key included
+        path: gzip.conf             # The entry's value should be stored in this file
+
+```
+
+## Secrets
+
+Much like ConfigMaps, Secrets can:
+
+* Pass Secret entries to the container as environment variables
+* Expose Secret entries as files in a volume
+
+Secrets are only distributed to the nodes that need it and are stored in memory.
+
+List
+
+```
+kubectl get secrets
+```
