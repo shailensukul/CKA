@@ -172,7 +172,13 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | Create pod as a different user | `kubectl --user alice create -f pod.yaml` |
 | NETWORK POLICY  | |
 | | |
-| | |
-| | |
+| HORIZONTAL POD AUTOSCALING | |
+| Get hpa | `kubectl get hpa` |
+| Describe hpa | `kubectl describe hpa` |
+| Autoscale | `kubectl autoscale deployment kubia --cpu-percent=30 --min=1 --max=5` |
+| Watching multiple resources in parallel | `watch -n kubectl get hpa,deployment` |
+| Calculation logic | CPU Usage: Sum up CPU for all the pods and divide it by the target CPU and round to next largest integer = replica count |
+| | QPS: Sum of all QPS for all pods and divide that by the target QPS and round to the next large integer = replica count |
+| | Take the replica count which is larger in above |
 | | |
 
