@@ -189,7 +189,14 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | NODE TAINTS | |
 | Taint a node | `kubectl taint node mynode node-type=production:NoSchedule` |
 |  Effects | There are 4 possible effects: <br/>* NoSchedule - which means pods will not be scheduled to the node if they don't tolerate the taint <br/>* PreferNoSchedule - scheduler will try to avoid scheduling the pod to the node <br/> unless it cannot schedule it somewhere else <br/>* NoExecute - pods that are already running  & don't tolerate the taint will be evicted from the pod |
-|  | |
+| On the pod side | ```
+...
+tolerations:
+- key: node-type
+  operator: Equal
+  value: production
+  effective: NoSchedule
+``` |
 |  | |
 |  | |
 |  | |
