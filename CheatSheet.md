@@ -105,6 +105,15 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | DAEMONSET | *One pod per node* |
 | kubectl get ds | Gets all DeamonSets |
 | kubectl label node myNode disk=ssd | Label the node so that it can picked by the DaemonSet selector |
+| PODS | |
+| Get pod status | `kubectl get pods` |
+| Get ReplicaSet details on pods | `kubectl describe rs my-pod` |
+| Get details on Pod | `kubectl describe pod my-prod`  |
+| Get container logs | `kubectl logs my-pod -c init` |
+| Delete a pod and override the grace period | `kubectl delete pod my-pod --grace-period=5` |
+| Immediately terminate the pod | `kubectl delete pod my-pod --grace-period=0 --force` |
+| Copy files from a container | `kubectl cp mypod:/var/log/foo.log foo.log` |
+| Copy files to a container | `kubectl cp localfile mypod:/etc/remotefile` |
 | JOBS | |
 | kubectl get jobs | Gets running job |
 | kubectl get pods --show-all | Shows the completed pod for the job. They are not deleted after they complete |
