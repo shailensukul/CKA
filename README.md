@@ -10,12 +10,12 @@ Certified Kubernetes Administrator V 1.19
 
 [Overview](Overview.md)
 
+![Overview](./images/Overview.png)
+
 ## Installation
 [Install on Pi Cluster](kubernetes-on-pi.md)
 
 [Cheatsheet](./CheatSheet.md)
-
-![Overview](/images/Overview.png)
 
 ## [25% - Cluster Architecture, Installation & Configuration](./Cluster-Architecture-Installation-Configuration/ReadMe.md)
 
