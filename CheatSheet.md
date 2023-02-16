@@ -61,6 +61,10 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl explain pod  |  Print documentation    |
 | CREATE | |
 | kubectl create -f kubia-manual.yaml | Create an object based on the YAML definition |
+| Context | |
+| Check current context | `kubectl config current-context` |
+| Use context | `kubectl config use-context produser@production` |
+| | |
 | LABEL | |
 | kubectl label pod kubia-manual creation_method=manual| Update the lable for a pod |
 | kubectl label pod kubia-manual env=debug --overwrite | Change existing label |
@@ -97,7 +101,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl edit rc kubia-rc | Open the ReplicationController's YAML file in the text editor |
 | kubectl scale rc kubia-rc --replicas=3 | Scale the ReplicationController |
 | kubectl delete rc kubia-rc | Delete the ReplicationController and all its Pods |
-| kubectl delete rc kubia-rc --cascade=false | Delete the ReplicationController but leave all its Pods |
+| kubectl delete rc kubia-rc --cascade=false | Delete the ReplicationController but leave all its Pods |kubec
 | REPLICASETS | *More expressive than a ReplicationController* |
 | kubectl get rc kubia-rs | Get ReplicaSet |
 | kubectl describe rc kubia-rs | Describe the ReplicaSet in more detail |
@@ -122,6 +126,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl delelte job batch-job | Delete a job |
 | kubectl scale job batch-job --replicas=3 | Runs 3 pods in parallel |
 | DEPLOYMENTS | |
+| Validate if user john can create deployments | `kubectl auth can-i create deployments --as john` |
 | Create a deployment | `kubectl apply -f nginx-deployment.yaml` |
 | Check status of deployments | `kubectl get deployments` |
 | Check deployment rollout status | `kubectl rollout status deployment/nginx-deployment` |

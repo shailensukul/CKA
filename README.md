@@ -15,6 +15,8 @@ Certified Kubernetes Administrator V 1.19
 
 [Cheatsheet](./CheatSheet.md)
 
+![Overview](/images/Overview.png)
+
 ## [25% - Cluster Architecture, Installation & Configuration](./Cluster-Architecture-Installation-Configuration/ReadMe.md)
 
 * Manage role based access control (RBAC)
