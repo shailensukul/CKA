@@ -359,3 +359,27 @@ Get upgrade plans
 kubectl -n system-upgrade get plans -o yaml
 kubectl -n system-upgrade get jobs -o yaml
 ```
+
+# Upgrade Ubuntu
+
+## Update Ubuntu LTS
+
+```
+#check version 
+lsb_release -a
+```
+
+```
+sudo apt install update-manager-core
+```
+
+```
+sudo apt update && sudo apt dist-upgrade
+```
+
+reboot 
+
+```
+#upgrade
+sudo do-release-upgrade
+```
