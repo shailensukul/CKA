@@ -7,7 +7,7 @@
 
 [Pi as NFS](https://gist.github.com/arkon108/86cba0b742cb8791f9fe1e9639f5205b)
 
-## Overview
+# Overview
 
 | Pi | IP |
 | --- | --- |
@@ -16,7 +16,7 @@
 | pi-3 | 192.168.86.43 |
 | pi-4 | 192.168.86.46 |
 
-## Set-up Process (do the following on each Raspberry Pi)
+# Prequisites (do the following on each Raspberry Pi)
 
 * [Download and flash Pi SD card](https://ubuntu.com/download/raspberry-pi)
 * [Download Win32 Disk Imager](https://sourceforge.net/projects/win32diskimager/files/latest/download?source=navbar)
@@ -58,6 +58,9 @@ Let’s log out and copy the SSH keys, so we won’t have to use the password fo
 (Open the Git for windows command prompt)
 ```
 ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.36
+ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.45
+ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.43
+ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.46
 ```
 
 
@@ -89,7 +92,13 @@ Path `C:\Windows\System32\drivers\etc\hosts`
 
 * Configure boot options
 
-Edit /boot/firmware/cmdline.txt and add:
+Edit /boot/firmware/cmdline.txt 
+```
+nano /boot/firmware/cmdline.txt
+```
+
+and add:
+
 ```
 cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1 swapaccount=1
 ```
@@ -144,7 +153,8 @@ Edit the daemon.json file (this file most likely won't exist yet)
 
 * Enable routing
 
-Find the following line in the file: `/etc/sysctl.conf`
+Find the following line in the file: 
+`nano /etc/sysctl.conf`
 
 ```
  #net.ipv4.ip_forward=1
@@ -169,34 +179,48 @@ Run the hello-world container:
  docker run hello-world
 ```
 
+# Install Kubernetes 
+
+Ref: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
 * Add Kubernetes repository
 ```
- sudo nano /etc/apt/sources.list.d/kubernetes.list
-```
-Add:
-```
- deb http://apt.kubernetes.io/ kubernetes-xenial main
+sudo apt-get update && sudo apt-get install -y apt-transport-https curl
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 Add the GPG key to the Pi:
 ```
  curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 ```
+## Master-only - Initialize Kubernetes
 
-* Install required Kubernetes packages
+ Generate a bootstrap token to authenticate nodes joining the cluster
+ ```
+TOKEN=$(sudo kubeadm token generate)
+echo $TOKEN
+d584xg.xupvwv7wllcpmwjy
 ```
- sudo apt update
+Reset a cluster, if necessary
+```
+kubeadm reset 
+systemctl restart kubelet
 
-sudo apt install kubeadm kubectl kubelet
+rm /etc/containerd/config.toml
+systemctl restart containerd
 ```
 
-Note: If you get errors with the first command, wait a few minutes and try again.
-
-* Master-only - Initialize Kubernetes
-
-Run:
+(Optional) Delete a cluster
 ```
- sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+kubectl config delete-cluster default
+```
+
+Init a cluster:
+```
+kubeadm init --token=${TOKEN} --kubernetes-version=v1.26.1 --pod-network-cidr=10.244.0.0/16
 ```
 
 ```
@@ -206,7 +230,7 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 192.168.86.36:6443 --token np3ppc.wtquqbdkcuud2x7y \
+kubeadm join 192.168.86.45:6443 --token ${TOKEN} \
     --discovery-token-ca-cert-hash sha256:c7ecf173f263da1a74bb08e61c79a7d5e05727bd93590e4459240962497c0419
 ```
 
@@ -223,7 +247,9 @@ The previous command will give you three additional commands to run, most likely
 ```
 Go ahead and run those, but if it recommends different commands, run those instead.
 
-* Install flannel network driver
+* Install a CNI add-on - Install flannel network driver
+A CNI add-on handles configuration and cleanup of the pod networks. This exercise uses the Flannel CNI add-on. With the podCIDR value already set, you can just download the Flannel YAML and use kubectl apply to install it into the cluster. This can be done on one line using kubectl apply -f - to take the data from standard input. This will create the ClusterRoles, ServiceAccounts, and DaemonSets (etc.) necessary to manage the pod networking.
+
 ```
  kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
  ```
@@ -304,7 +330,7 @@ Check the status with:
  ```
 
 
-# Upgrading Ubutnu
+# Upgrading Ubuntu
 
 ## Step 1 Update and upgrade your current Ubuntu 20.04 system:
 
@@ -382,4 +408,39 @@ reboot
 ```
 #upgrade
 sudo do-release-upgrade
+```
+
+## Remove Kubernetes
+```
+#!/bin/sh
+# Kube Admin Reset
+kubeadm reset
+
+# Remove all packages related to Kubernetes
+apt remove -y kubeadm kubectl kubelet kubernetes-cni 
+apt purge -y kube*
+
+# Remove docker containers/ images ( optional if using docker)
+docker image prune -a
+systemctl restart docker
+apt purge -y docker-engine docker docker.io docker-ce docker-ce-cli containerd containerd.io runc --allow-change-held-packages
+
+# Remove parts
+
+apt autoremove -y
+
+# Remove all folder associated to kubernetes, etcd, and docker
+rm -rf ~/.kube
+rm -rf /etc/cni /etc/kubernetes /var/lib/dockershim /var/lib/etcd /var/lib/kubelet /var/lib/etcd2/ /var/run/kubernetes ~/.kube/* 
+rm -rf /var/lib/docker /etc/docker /var/run/docker.sock
+rm -f /etc/apparmor.d/docker /etc/systemd/system/etcd* 
+
+# Delete docker group (optional)
+groupdel docker
+
+# Clear the iptables
+iptables -F && iptables -X
+iptables -t nat -F && iptables -t nat -X
+iptables -t raw -F && iptables -t raw -X
+iptables -t mangle -F && iptables -t mangle -X
 ```
