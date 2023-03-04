@@ -137,7 +137,7 @@ Reboot each Pi:
 Edit the daemon.json file (this file most likely won't exist yet)
 
 ```
- sudo nano /etc/docker/daemon.json
+ 
  ```
 
  ```
@@ -187,15 +187,20 @@ Ref: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/insta
 ```
 sudo apt-get update && sudo apt-get install -y apt-transport-https curl
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+
+* Add Kubernetes apt repository
+```
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+```
+
 sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
-Add the GPG key to the Pi:
-```
- curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-```
 ## Master-only - Initialize Kubernetes
 
  Generate a bootstrap token to authenticate nodes joining the cluster
@@ -204,10 +209,13 @@ TOKEN=$(sudo kubeadm token generate)
 echo $TOKEN
 d584xg.xupvwv7wllcpmwjy
 ```
+
 Reset a cluster, if necessary
+
 ```
 kubeadm reset 
 systemctl restart kubelet
+pkill kubelet
 
 rm /etc/containerd/config.toml
 systemctl restart containerd
@@ -218,9 +226,33 @@ systemctl restart containerd
 kubectl config delete-cluster default
 ```
 
+(Optional) Add firewall rules
+Or run this if you do not want firewalls
+`systemctl stop firewalld`
+
+```
+apt install firewalld
+
+$ sudo firewall-cmd --permanent --add-port=6443/tcp
+$ sudo firewall-cmd --permanent --add-port=2379-2380/tcp
+$ sudo firewall-cmd --permanent --add-port=10250/tcp
+$ sudo firewall-cmd --permanent --add-port=10251/tcp
+$ sudo firewall-cmd --permanent --add-port=10252/tcp
+$ sudo firewall-cmd --permanent --add-port=10255/tcp
+$ sudo firewall-cmd –reload
+```
+
+Enter the following commands on each worker node:
+
+```
+$ sudo firewall-cmd --permanent --add-port=10251/tcp
+$ sudo firewall-cmd --permanent --add-port=10255/tcp
+$ firewall-cmd --reload
+```
+
 Init a cluster:
 ```
-kubeadm init --token=${TOKEN} --kubernetes-version=v1.26.1 --pod-network-cidr=10.244.0.0/16
+kubeadm init --token=${TOKEN} --kubernetes-version=v1.26.2 --pod-network-cidr=10.244.0.0/16  --apiserver-advertise-address=192.168.86.36
 ```
 
 ```
@@ -417,8 +449,9 @@ sudo do-release-upgrade
 kubeadm reset
 
 # Remove all packages related to Kubernetes
-apt remove -y kubeadm kubectl kubelet kubernetes-cni 
-apt purge -y kube*
+apt remove -y --allow-change-held-packages kubeadm kubectl kubelet kubernetes-cni 
+apt purge -y --allow-change-held-packages kube*
+sudo apt autoremove
 
 # Remove docker containers/ images ( optional if using docker)
 docker image prune -a
