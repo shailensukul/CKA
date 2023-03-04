@@ -285,64 +285,6 @@ See if the nodes have joined successfully, run the following command a few times
  kubectl get nodes
 ```
 
-* pod.yml
-```
- apiVersion: v1
- kind: Pod
- metadata:
-   name: nginx-example
-   labels:
-     app: nginx
- spec:
-   containers:
-     - name: nginx
-       image: linuxserver/nginx
-       ports:
-         - containerPort: 80
-           name: "nginx-http"
-```
-
-* service-nodeport.yml
-```
- apiVersion: v1
- kind: Service
- metadata:
-   name: nginx-example
- spec:
-   type: NodePort
-   ports:
-     - name: http
-       port: 80
-       nodePort: 30080
-       targetPort: nginx-http
-   selector:
-     app: nginx
-```
-
-* Apply the pod yaml file
-```
- kubectl apply -f pod.yml
-```
-Check the status with:
-```
- kubectl get pods
-```
-Check the status with more info:
-```
- kubectl get pods -o wide
-```
-
-* Apply the service yaml file
-```
- kubectl apply -f service-nodeport.yml
-```
-
-Check the status with:
-```
- kubectl get service
- ```
-
-
 # Upgrading Ubuntu
 
 ## Step 1 Update and upgrade your current Ubuntu 20.04 system:
