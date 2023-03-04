@@ -12,6 +12,7 @@ Certified Kubernetes Administrator V 1.19
 
 ![Overview](./images/Overview.png)
 
+[Installing Kubernetes on Pi](kubernetes-on-pi.md)
 
 ## [Exercises](./Exercises/ReadMe.md)
 
