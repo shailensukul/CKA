@@ -1,11 +1,8 @@
 # Kubernetes on Raspberry Pi
 [Back](../README.md)
 
-[Build Reference](https://wiki.learnlinux.tv/index.php/Setting_up_a_Raspberry_Pi_Kubernetes_Cluster_with_Ubuntu_20.04)
 
-[Reference 2](https://medium.com/icetek/building-a-kubernetes-cluster-on-raspberry-pi-running-ubuntu-server-8fc4edb30963)
-
-[Pi as NFS](https://gist.github.com/arkon108/86cba0b742cb8791f9fe1e9639f5205b)
+![Kubernetes on Pi](/images/Pi-Kubernetes.jpg)
 
 # Overview
 
