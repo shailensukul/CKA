@@ -57,13 +57,11 @@ ssh ubuntu@192.168.0.238
 Let’s log out and copy the SSH keys, so we won’t have to use the password for every login — also for k3sup to be able to deploy the Kubernetes cluster. To copy the SSH keys to the machine run the following
 (Open the Git for windows command prompt)
 ```
-ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.36
-ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.45
-ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.43
-ssh-copy-id -i C:/Users/shail/.ssh/rpi ubuntu@192.168.86.46
+ssh-copy-id -i C:/Users/shailen/.ssh/rpi ubuntu@192.168.86.36
+ssh-copy-id -i C:/Users/shailen/.ssh/rpi ubuntu@192.168.86.45
+ssh-copy-id -i C:/Users/shailen/.ssh/rpi ubuntu@192.168.86.43
+ssh-copy-id -i C:/Users/shailen/.ssh/rpi ubuntu@192.168.86.46
 ```
-
-
 * Edit the host name
 
 Edit /etc/hosts and /etc/hostname on the SD card to the actual name of the instance
@@ -92,7 +90,6 @@ Path `C:\Windows\System32\drivers\etc\hosts`
 
 * Configure boot options
 
-Edit /boot/firmware/cmdline.txt 
 ```
 nano /boot/firmware/cmdline.txt
 ```
@@ -125,7 +122,7 @@ Reboot each Pi:
  usermod -aG sudo jay
 ```
 
-* Install Docker
+# Install Docker
 
 ```
  curl -sSL get.docker.com | sh
@@ -135,11 +132,7 @@ Reboot each Pi:
 * Set Docker daemon options
 
 Edit the daemon.json file (this file most likely won't exist yet)
-
-```
- 
- ```
-
+`nano /etc/docker/daemon. json`
  ```
  {
    "exec-opts": ["native.cgroupdriver=systemd"],
@@ -181,7 +174,7 @@ Run the hello-world container:
 
 # Install Kubernetes 
 
-Ref: https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+Debian Guide: https://www.linuxtechi.com/install-kubernetes-cluster-on-debian/
 
 * Add Kubernetes repository
 ```
@@ -193,8 +186,16 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt
 ```
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
+sudo apt-get install -y ca-certificates curl
+
+sudo apt-get install -y apt-transport-https
+
+sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
+```
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
 sudo apt-get install -y kubelet kubeadm kubectl
@@ -215,7 +216,15 @@ Reset a cluster, if necessary
 ```
 kubeadm reset 
 systemctl restart kubelet
+
+(Optional
 pkill kubelet
+
+# find who is using the ports 
+netstat -plnt
+
+# if k3s is interfering with Kubernetes, remove the sucker
+`/usr/local/bin/k3s-uninstall.sh`
 
 rm /etc/containerd/config.toml
 systemctl restart containerd
@@ -226,44 +235,16 @@ systemctl restart containerd
 kubectl config delete-cluster default
 ```
 
-(Optional) Add firewall rules
-Or run this if you do not want firewalls
-`systemctl stop firewalld`
-
-```
-apt install firewalld
-
-$ sudo firewall-cmd --permanent --add-port=6443/tcp
-$ sudo firewall-cmd --permanent --add-port=2379-2380/tcp
-$ sudo firewall-cmd --permanent --add-port=10250/tcp
-$ sudo firewall-cmd --permanent --add-port=10251/tcp
-$ sudo firewall-cmd --permanent --add-port=10252/tcp
-$ sudo firewall-cmd --permanent --add-port=10255/tcp
-$ sudo firewall-cmd –reload
-```
-
-Enter the following commands on each worker node:
-
-```
-$ sudo firewall-cmd --permanent --add-port=10251/tcp
-$ sudo firewall-cmd --permanent --add-port=10255/tcp
-$ firewall-cmd --reload
-```
-
 Init a cluster:
 ```
 kubeadm init --token=${TOKEN} --kubernetes-version=v1.26.2 --pod-network-cidr=10.244.0.0/16  --apiserver-advertise-address=192.168.86.36
 ```
 
 ```
-You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+# join any number of worker nodes by running the following on each as root:
 
-Then you can join any number of worker nodes by running the following on each as root:
-
-kubeadm join 192.168.86.45:6443 --token ${TOKEN} \
-    --discovery-token-ca-cert-hash sha256:c7ecf173f263da1a74bb08e61c79a7d5e05727bd93590e4459240962497c0419
+kubeadm join 192.168.86.36:6443 --token swscfi.5mhbuq32ngkwqpre \
+        --discovery-token-ca-cert-hash sha256:39a63cda9c449ac0c99d943ca1d4adafece74d7055c06518c446e148fef5365f
 ```
 
 Once this runs, you will get some output that will include the join command, but don't join nodes yet. Copy this somewhere for later.
@@ -388,92 +369,12 @@ Furthermore, if you are upgrading before the official upgrade from Ubuntu 18.04 
 sudo do-release-upgrade
 ```
 
-## Step 4 Upgrade K3S
+# Troubleshooting
 
-Manual Upgrade (run on every node)
-```
-# From the stable channel
-curl -sfL https://get.k3s.io | sh -
+1. Set up the Docker repository as described in https://docs.docker.com/engine/install/ubuntu/#set-up-the-repository
+2. Remove the old containerd:apt remove containerd
+3. Update repository data and install the new containerd: apt update, apt install containerd.io
+4. Remove the installed default config file: rm /etc/containerd/config.toml
+5. Restart containerd: systemctl restart containerd
 
-# Restart servers
-sudo systemctl restart k3s
-
-# Restart agents
-sudo systemctl restart k3s-agent
-```
-
-Check version
-```
-kubectl get nodes -o wide
-```
-
-Install the System Upgrade Controller
-```
-kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/download/v0.6.2/system-upgrade-controller.yaml
-```
-
-Get upgrade plans 
-```
-kubectl -n system-upgrade get plans -o yaml
-kubectl -n system-upgrade get jobs -o yaml
-```
-
-# Upgrade Ubuntu
-
-## Update Ubuntu LTS
-
-```
-#check version 
-lsb_release -a
-```
-
-```
-sudo apt install update-manager-core
-```
-
-```
-sudo apt update && sudo apt dist-upgrade
-```
-
-reboot 
-
-```
-#upgrade
-sudo do-release-upgrade
-```
-
-## Remove Kubernetes
-```
-#!/bin/sh
-# Kube Admin Reset
-kubeadm reset
-
-# Remove all packages related to Kubernetes
-apt remove -y --allow-change-held-packages kubeadm kubectl kubelet kubernetes-cni 
-apt purge -y --allow-change-held-packages kube*
-sudo apt autoremove
-
-# Remove docker containers/ images ( optional if using docker)
-docker image prune -a
-systemctl restart docker
-apt purge -y docker-engine docker docker.io docker-ce docker-ce-cli containerd containerd.io runc --allow-change-held-packages
-
-# Remove parts
-
-apt autoremove -y
-
-# Remove all folder associated to kubernetes, etcd, and docker
-rm -rf ~/.kube
-rm -rf /etc/cni /etc/kubernetes /var/lib/dockershim /var/lib/etcd /var/lib/kubelet /var/lib/etcd2/ /var/run/kubernetes ~/.kube/* 
-rm -rf /var/lib/docker /etc/docker /var/run/docker.sock
-rm -f /etc/apparmor.d/docker /etc/systemd/system/etcd* 
-
-# Delete docker group (optional)
-groupdel docker
-
-# Clear the iptables
-iptables -F && iptables -X
-iptables -t nat -F && iptables -t nat -X
-iptables -t raw -F && iptables -t raw -X
-iptables -t mangle -F && iptables -t mangle -X
-```
+The kubeadm init command worked fine afterwards.
