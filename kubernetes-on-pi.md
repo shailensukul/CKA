@@ -1,5 +1,5 @@
 # Kubernetes on Raspberry Pi
-[Back](../README.md)
+[Back](README.md)
 
 
 ![Kubernetes on Pi](/images/Pi-Kubernetes.jpg)
