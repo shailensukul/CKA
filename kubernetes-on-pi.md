@@ -176,13 +176,8 @@ Run the hello-world container:
 
 Debian Guide: https://www.linuxtechi.com/install-kubernetes-cluster-on-debian/
 
-* Add Kubernetes repository
-```
-sudo apt-get update && sudo apt-get install -y apt-transport-https curl
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-
 * Add Kubernetes apt repository
+
 ```
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
@@ -195,6 +190,7 @@ sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packag
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
+Install the kube* packages
 ```
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl
