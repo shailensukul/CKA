@@ -14,6 +14,8 @@ Certified Kubernetes Administrator V 1.19
 
 [Nano Editor Tricks](./Exercises/Nano-Editor-Tricks.md)
 
+[Exercises](./Exercises/ReadMe.md)
+
 [Installing Kubernetes on Pi](kubernetes-on-pi.md)
 
 ## [Exercises](./Exercises/ReadMe.md)
