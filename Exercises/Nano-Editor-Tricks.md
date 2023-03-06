@@ -33,6 +33,11 @@
 * `Esc + 3` to comment
 * `Esc + U` to uncomment
 
+## Indent a block of text
+
+* Select text with `Esc + A` and select text
+* Press `Esc + Shift + }` to indent text
+
 ## Show spaces as dots
 
 * `Esc + P` to show spaces as dots
@@ -62,8 +67,3 @@ Shortcut for all options is :
 ## Find a string
 
 * Press `Ctrl + W`, enter string and press ENTER
-
-## Indent a block of text
-
-* Select text with `Esc + A` and select text
-* Press `Esc + Shift + }` to indent text
