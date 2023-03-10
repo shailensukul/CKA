@@ -98,7 +98,7 @@ To work out the etcdctl arguments
 `kubectl describe pod etcd-pi-1 -n kube-system`
 * Now that you have all the parameters, you can plug it into the documentation templates
 
-#### Backup
+#### etcdctl
 * Search for `etcd backup` and click on the first result
 * Search the page for `backup` and copy the command template:
 ```
@@ -120,8 +120,44 @@ ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/
 
 List members
 ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt member list
+```
 
 Health of cluster
+```
 curl -k https://localhost:6443/healthz?verbose
 ```
 
+## Exercise 4 - Perform a version upgrade on a Kubernetes cluster using Kubeadm
+
+1. Using kubeadm, upgrade a cluster to the lastest version
+
+If held, unhold the kubeadm version
+```
+sudo apt-mark unhold kubeadm
+```
+
+Upgrade the kubeadm version:
+```
+sudo apt-get install --only-upgrade kubeadm
+```
+
+plan the upgrade:
+```
+sudo kubeadm upgrade plan
+```
+
+```
+Components that must be upgraded manually after you have upgraded the control plane with 'kubeadm upgrade apply':
+COMPONENT   CURRENT       AVAILABLE
+kubelet     1 x v1.19.0   v1.20.2
+```
+
+Upgrade the cluster
+```
+kubeadm upgrade apply v1.20.2
+```
+
+Upgrade Kubelet:
+```
+sudo apt-get install --only-upgrade kubelet
+```
