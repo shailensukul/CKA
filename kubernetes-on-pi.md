@@ -313,3 +313,22 @@ sudo do-release-upgrade
 5. Restart containerd: systemctl restart containerd
 
 The kubeadm init command worked fine afterwards.
+
+# Troubeshooting etcdctl
+
+Get pararmeters
+```
+kubectl get pod -n kube-system kube-apiserver-kube-master -o yaml |grep -i etcd
+```
+
+Fill in properties
+```
+ETCDCTL_API=3 etcdctl --endpoints <ETCD-SERVER-IP:PORT> --cert=<CLIENT-CERT-FROM-ABOVE-OUTPUT> --key=<CLIENT-KEY-FROM-ABOVE-OUTPUT> --cacert=<CA-CERT-FROM-ABOVE-OUTPUT> <ETCD-SUBCOMMANDS-HER
+```
+
+Run command
+```
+ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt member list
+```
+
+ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt --cluster=true endpoint health
