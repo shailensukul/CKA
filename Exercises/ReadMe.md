@@ -29,7 +29,7 @@ You can generate a template as per below:
 
 `kubectl explain <resourceType>`
 
-ex: `kubecto explain deployment`
+ex: `kubectl explain deployment`
 
 # Exercises
 
