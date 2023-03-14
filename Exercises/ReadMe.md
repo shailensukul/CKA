@@ -155,9 +155,30 @@ kubelet     1 x v1.19.0   v1.20.2
 Upgrade the cluster
 ```
 kubeadm upgrade apply v1.20.2
-```
+````
 
 Upgrade Kubelet:
 ```
 sudo apt-get install --only-upgrade kubelet
+```
+
+## Exercise 5 - Implement etcd backup and restore
+
+1. Take a backup of etcd
+2. Verify the etcd backup has been successful
+3. Restore the backup back to the cluster
+
+Take a snapshot of etcd:
+```
+ETCDCTL_API=3 etcdctl snapshot save snapshot.db --cacert /etc/kubernetes/pki/etcd/server.crt --cert /etc/kubernetes/pki/etcd/ca.crt --key /etc/kubernetes/pki/etcd/ca.key
+```
+
+Verify the snapshot:
+```
+sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshot.db
+```
+
+Perform a restore:
+```
+ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
 ```
