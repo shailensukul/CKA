@@ -33,4 +33,4 @@ ex: `kubectl explain deployment`
 
 # Exercises
 
-* [01 Cluster Architcture, Installation and Configuration](01-Cluster Architcture, Installation and Configuration.md)
+* [01 Cluster Architcture, Installation and Configuration](./01-Cluster-Architcture-Installation-and-Configuration.md)
