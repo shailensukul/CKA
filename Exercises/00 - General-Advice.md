@@ -13,6 +13,18 @@
 
 ## Use --all-namespaces to list objects from all namespaces
 
+## View all contexts
+`kubectl config view`
+
+## Check the current context
+`kubectl config current-context`
+
+## Change the context
+`kubectl config use-context dev`
+
+## Change the namespace for the current context
+`kubectl config set-context --current --namespace=<insert-namespace-name-here>`
+
 ## Enable autocompletion
 
 `apt-get install bash-completion`

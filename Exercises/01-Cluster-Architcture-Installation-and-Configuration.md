@@ -9,6 +9,11 @@
 5. Prove that the `job-inspector` service account can "get" `job` objects but not `deployment` objects
 
 Answer
+
+* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
+* Search for `RBAC` and click on the first result
+* Browse down to the `Command-line utilities` section
+
 ```
 kubectl create namespace rbac
 kubectl create serviceaccount job-inspector -n rbac
