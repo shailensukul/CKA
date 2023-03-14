@@ -91,40 +91,36 @@ Answer
 #### Etcd/Etcdctl
 
 To work out the etcdctl arguments
-* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
 * Find the `etcd-master` pod running etcdctl
-`kubect get pod -n kube-system`
+`kubectl get pod -n kube-system`
 * Get the pods properties
 `kubectl describe pod etcd-pi-1 -n kube-system`
 * Now that you have all the parameters, you can plug it into the documentation templates
 
-#### etcdctl
-* Search for `etcd backup` and click on the first result
-* Search the page for `backup` and copy the command template:
-```
-ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=<trusted-ca-file> --cert=<cert-file> --key=<key-file> snapshot save <backup-file-location>
-```
-* Swap parameters
-```
-ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key snapshot save etcd-backup-01.bak
-```
-
-Verify backup
-```
-ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt --write-out=table snapshot status etcd-backup-01.bak
-```
-
 Check etcd cluster health
+
+Find the command by running 
+
+`ETCDCTL_API=3 etcdctl  -h` to find the command for endpoint status
+
+ `ETCDCTL_API=3 etcdctl endpoint status -h` to get the command for the endpointy health
+
 ```
-ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt --cluster=true endpoint health
+ETCDCTL_API=3 etcdctl endpoint health --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/peer.crt --key=/etc/kubernetes/pki/etcd/peer.key --cluster=true 
+```
 
 List members
-ETCDCTL_API=3 etcdctl --endpoints https://127.0.0.1:2379 --cert=/etc/kubernetes/pki/apiserver-etcd-client.crt --key=/etc/kubernetes/pki/apiserver-etcd-client.key --cacert=/etc/kubernetes/pki/etcd/ca.crt member list
+```
+ETCDCTL_API=3 etcdctl  member list --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/peer.crt --key=/etc/kubernetes/pki/etcd/peer.key
 ```
 
 Health of cluster
+
+* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
+* Search for `api health` and click on the first result
+
 ```
-curl -k https://localhost:6443/healthz?verbose
+curl -k https://localhost:6443/livez?verbose
 ```
 
 ## Exercise 4 - Perform a version upgrade on a Kubernetes cluster using Kubeadm
@@ -168,17 +164,60 @@ sudo apt-get install --only-upgrade kubelet
 2. Verify the etcd backup has been successful
 3. Restore the backup back to the cluster
 
-Take a snapshot of etcd:
+To work out the etcdctl arguments
+
+* Find the `etcd-master` pod running etcdctl
+`kubectl get pod -n kube-system`
+* Get the pods properties
+`kubectl describe pod etcd-pi-1 -n kube-system`
+
+Use the --peer-* values
 ```
-ETCDCTL_API=3 etcdctl snapshot save snapshot.db --cacert /etc/kubernetes/pki/etcd/server.crt --cert /etc/kubernetes/pki/etcd/ca.crt --key /etc/kubernetes/pki/etcd/ca.key
+ Command:
+      etcd
+      --advertise-client-urls=https://192.168.86.36:2379
+      --cert-file=/etc/kubernetes/pki/etcd/server.crt
+      --client-cert-auth=true
+      --data-dir=/var/lib/etcd
+      --experimental-initial-corrupt-check=true
+      --experimental-watch-progress-notify-interval=5s
+      --initial-advertise-peer-urls=https://192.168.86.36:2380
+      --initial-cluster=pi-1=https://192.168.86.36:2380
+      --key-file=/etc/kubernetes/pki/etcd/server.key
+      --listen-client-urls=https://127.0.0.1:2379,https://192.168.86.36:2379
+      --listen-metrics-urls=http://127.0.0.1:2381
+      --listen-peer-urls=https://192.168.86.36:2380
+      --name=pi-1
+      --peer-cert-file=/etc/kubernetes/pki/etcd/peer.crt
+      --peer-client-cert-auth=true
+      --peer-key-file=/etc/kubernetes/pki/etcd/peer.key
+      --peer-trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+      --snapshot-count=10000
+      --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+```
+* Now that you have all the parameters, you can plug it into the documentation templates
+
+Commands
+* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
+* Search for `etcd backup` and click on the first result
+* Search the page for `backup` and copy the command template:
+
+Take a snapshot
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 --cacert=<trusted-ca-file> --cert=<cert-file> --key=<key-file> snapshot save <backup-file-location>
 ```
 
-Verify the snapshot:
+* Swap parameters
 ```
-sudo ETCDCTL_API=3 etcdctl --write-out=table snapshot status snapshot.db
+ETCDCTL_API=3 etcdctl snapshot save etcd-backup-01.bak --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/peer.crt --key=/etc/kubernetes/pki/etcd/peer.key
+```
+
+Verify backup
+```
+ETCDCTL_API=3 etcdctl --write-out=table snapshot status etcd-backup-01.bak
 ```
 
 Perform a restore:
 ```
-ETCDCTL_API=3 etcdctl snapshot restore snapshot.db
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 snapshot restore etcd-backup-01.bak
 ```
