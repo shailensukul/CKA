@@ -24,6 +24,11 @@ kubectl --as=system:serviceaccount:rbac:job-inspector auth can-i get deployment 
 ```
 
 ## Exercise 2 - Use Kubeadm to install a basic cluster
+
+* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
+* Search for `install cluster` and click on the first result
+* Search the page for `kubeadm init`
+
 1. On a node, install kubeadm and stand up the control plane, using 10.244.0.0/16 as the pod network CIDR, and https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml as the CNI
 
 2. On a node, install kubeadm and join it to the cluster as a worker node
@@ -31,19 +36,31 @@ kubectl --as=system:serviceaccount:rbac:job-inspector auth can-i get deployment 
 3. On the master node, determine the health of the cluster by probing the API endpoint
 
 Answer
+Node 1
 
 ```
 # Assuming kubeadm, kubectl and kubelet have been installed
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+# You should now deploy a Pod network to the cluster.
+# Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+#  /docs/concepts/cluster-administration/addons/
 
 sudo kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 ...
-# join node as worker, get this from the previous step
+
+# join node 2 as worker, get this from the previous step
+
 kubeadm join 172.16.10.210:6443 --token 9tjntl.10plpxqy85g8a0ui \
     --discovery-token-ca-cert-hash sha256:381165c9a9f19a123bd0fee36fe36d15e918062dcc94711ff5b286ee1f86b92b 
 
@@ -57,6 +74,10 @@ kubectl get nodes
 2. Using `etcdctl`, identify the list of members
 3. On the master node, determine the health of the cluster by probing the API endpoint
 4. Backup the etcd cluster
+
+* Go to the [Kubernetes docs home page](https://kubernetes.io/docs/home/)
+* Search for `etcdctl` and click on the first result
+* Search the page for `kubeadm init`
 
 Answer
 

@@ -5,6 +5,7 @@ Certified Kubernetes Administrator V 1.19
 * [Curriculum](https://github.com/cncf/curriculum)
 * [Kubernetes Documentation](https://kubernetes.io/docs)
 * [Other Guide](http://www.lib4dev.in/info/walidshaari/Kubernetes-Certified-Administrator/103684801)
+* [Exam Prep](https://github.com/David-VTUK/CKA-StudyGuide/tree/master/LabGuide)
 
 ## Overview
 
