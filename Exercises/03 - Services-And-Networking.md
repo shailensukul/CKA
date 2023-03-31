@@ -4,7 +4,9 @@ Lab Exercises for Services & Networking
 =======================================
 
 Lab Exercises for Services & Networking
-===========================Exercise 0 - Setup
+===========================
+
+Exercise 0 - Setup
 ==================
 
 -   Prepare a cluster (Single node, kubeadm, k3s, etc)
