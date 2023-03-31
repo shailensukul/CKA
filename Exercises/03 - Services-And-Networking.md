@@ -14,7 +14,42 @@ Exercise 0 - Setup
 Exercise 1 - Understand connectivity between Pods
 =================================================
 
-1.  Deploy [the following manifest](https://raw.githubusercontent.com/David-VTUK/CKAExampleYaml/master/nginx-svc-and-deployment.yaml)
+1.  Deploy the following manifest
+```
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.7.9
+        ports:
+        - containerPort: 80
+```
 2.  Using `kubectl`, identify the Pod IP addresses
 3.  Determine the DNS name of the service.
 
@@ -39,8 +74,6 @@ Service name will be, based on the format `[Service Name].[Namespace].[Type].[B
 nginx-service.default.svc.cluster.local
 ```
 
-[](https://github.com/David-VTUK/CKA-StudyGuide/blob/master/LabGuide/03-Services%20%26%20Networking.md#exercise-2---understand-clusterip-nodeport-loadbalancer-service-types-and-endpoint)
-
 Exercise 2 - Understand ClusterIP, NodePort, LoadBalancer service types and endpoint
 ====================================================================================
 
@@ -50,11 +83,19 @@ Exercise 2 - Understand ClusterIP, NodePort, LoadBalancer service types and endp
 4.  Expose one of these deployments with a service of type `Loadbalancer`
     1.  Note, this remains in `pending` status unless your cluster has integration with a cloud provider that provisions one for you (ie AWS ELB), or you have a software implementation such as `metallb`
 
-Answer - Imperative
+## Answer
 
-Answer - Declarative
+```source-shell
+kubectl create deployment nginx-clusterip --image=nginx --replicas 1
+kubectl create deployment nginx-nodeport --image=nginx --replicas 1
+kubectl create deployment nginx-loadbalancer --image=nginx --replicas 1
+```
 
-[](https://github.com/David-VTUK/CKA-StudyGuide/blob/master/LabGuide/03-Services%20%26%20Networking.md#exercise-3---know-how-to-use-ingress-controllers-and-ingress-resources)
+```source-shell
+kubectl expose deployment nginx-clusterip --type="ClusterIP" --port="80"
+kubectl expose deployment nginx-nodeport --type="NodePort" --port="80"
+kubectl expose deployment nginx-loadbalancer --type="LoadBalancer" --port="80"
+```
 
 Exercise 3 - Know how to use Ingress controllers and Ingress resources
 ======================================================================
@@ -65,9 +106,12 @@ Exercise 3 - Know how to use Ingress controllers and Ingress resources
 -   Traffic to the base path `/` will be forwarded to a `service` called `main` on port 80
 -   Traffic to the path `/api` will be forwarded to a `service` called `api` on port 8080
 
-Answer - ImperativeAnswer - Declarative
+## Answer 
 
-[](https://github.com/David-VTUK/CKA-StudyGuide/blob/master/LabGuide/03-Services%20%26%20Networking.md#exercise-4---know-how-to-configure-and-use-coredns)
+```
+kubectl create ingress myingress --rule="myingress.mydomain/=main:80" --rule="myingress.mydomain/api=api:8080"
+
+```
 
 Exercise 4 - Know how to configure and use CoreDNS
 ====================================================
@@ -77,6 +121,30 @@ Exercise 4 - Know how to configure and use CoreDNS
 3.  Validate the changes you have made
 4.  Add additional configuration so that all DNS queries for `custom.local` are forwarded to the resolver `10.5.4.223`
 
-Answer
+## Answer
+```source-shell
+kubectl get cm coredns -n kube-system
+NAME      DATA   AGE
+coredns   2      94d
+```
 
-CKA-StudyGuide/03-Services & Networking.md at master - David-VTUK/CKA-StudyGuide - GitHub============
+```source-shell
+kubectl edit cm coredns -n kube-system
+
+replace:
+forward . /etc/resolv.conf
+
+with
+forward . 8.8.8.8
+```
+
+Add the block:
+
+```source-shell
+custom.local:53 {
+        errors
+        cache 30
+        forward . 10.5.4.223
+        reload
+    }
+```
