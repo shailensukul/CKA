@@ -69,6 +69,11 @@ kubectl get po -l app=nginx -o wide
 ```
 
 Service name will be, based on the format `[Service Name].[Namespace].[Type].[Base Domain Name]` :
+You can run an interactive shell in your pod and run the nslookup command to get the FQDN
+```
+kubectl run myshell -it --rm --restart=Never --image=registry.k8s.io/e2e-test-images/jessie-dnsutils:1.3 -- /bin/sh
+
+```
 
 ```source-shell
 nginx-service.default.svc.cluster.local
