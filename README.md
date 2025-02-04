@@ -19,7 +19,7 @@ Certified Kubernetes Administrator V 1.19
 
 [Installing Kubernetes on Pi](kubernetes-on-pi.md)
 
-## [Exercises](./Labs.md)
+## [Labs](./Labs.md)
 
 ## Installation
 [Install on Pi Cluster](kubernetes-on-pi.md)
