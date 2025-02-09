@@ -19,3 +19,18 @@ Helpful scripts for the KodeKloud labs
 
 *Create ReplicaSet file via a Deployment*
 `kubectl create deployment my-rs --image=nginx --dry-run=client -o yaml > rs.yaml`
+
+*ReplicaSet commands*
+
+`kubectl create -f relicaset.yaml`
+
+`kubectl get replicaset`
+
+*Delete ReplicaSet*
+`kubectl delete replicaset my-rs`
+
+*Update ReplicaSet*
+`kubectl replace -f replicaset.yaml`
+
+*Sacle ReplicaSet (does not change the replica in the file)*
+`kubectl scale --replicas=6 -f replicaset.yaml`
