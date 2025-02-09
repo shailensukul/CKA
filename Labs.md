@@ -18,7 +18,7 @@ Helpful scripts for the KodeKloud labs
 `kubectl get pods -o wide`
 
 *Create ReplicaSet file via a Deployment*
-`kubectl create deployment my-rs --image=nginx --dry-run=client -o yaml > rs.yaml`
+`kubectl get rs my-rs -o yaml > rs.yaml`
 
 *ReplicaSet commands*
 
