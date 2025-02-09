@@ -16,3 +16,6 @@ Helpful scripts for the KodeKloud labs
 
 *Get extended information about a Pod*
 `kubectl get pods -o wide`
+
+*Create ReplicaSet file via a Deployment*
+`kubectl create deployment my-rs --image=nginx --dry-run=client -o yaml > rs.yaml`
