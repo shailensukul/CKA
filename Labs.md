@@ -5,6 +5,28 @@ Helpful scripts for the KodeKloud labs
 *Make Nano the default editor*
 `select-editor`
 
+*Vi Editor Commands*
+```
+vi filename
+
+// Visual mode (to select text)
+press v
+
+// insert mode
+press i
+
+// command mode
+// save and exit
+:wq
+
+// quit without saving changes
+:q!
+
+```
+
+*If unsure about a command*
+`kubectl expain replicaset`
+
 *Create a pod directly*
 `kubectl run podName --image=image [--dry-run=client] [-o yaml] > myfile.yaml`
 
