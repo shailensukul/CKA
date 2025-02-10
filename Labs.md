@@ -5,6 +5,10 @@ Helpful scripts for the KodeKloud labs
 *Make Nano the default editor*
 `select-editor`
 
+*Set the Kube Editor*
+`SET KUBE_EDITOR=nano`
+`echo $KUBE_EDITOR`
+
 *Vi Editor Commands*
 ```
 vi filename
