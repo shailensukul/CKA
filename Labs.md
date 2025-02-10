@@ -2,6 +2,9 @@
 
 Helpful scripts for the KodeKloud labs
 
+*Make Nano the default editor*
+`select-editor`
+
 *Create a pod directly*
 `kubectl run podName --image=image [--dry-run=client] [-o yaml] > myfile.yaml`
 
@@ -34,3 +37,6 @@ Helpful scripts for the KodeKloud labs
 
 *Sacle ReplicaSet (does not change the replica in the file)*
 `kubectl scale --replicas=6 -f replicaset.yaml`
+
+*Edit ReplicaSet to scale*
+`kubectl edit rs my-rs`
