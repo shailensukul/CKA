@@ -66,3 +66,8 @@ press i
 
 *Edit ReplicaSet to scale*
 `kubectl edit rs my-rs`
+
+## Deployments
+
+*Create a sample Deployment file
+`kubectl run  deployment --image=nginx --dry-run=client -o yaml`
