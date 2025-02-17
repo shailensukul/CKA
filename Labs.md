@@ -31,6 +31,9 @@ press i
 *If unsure about a command*
 `kubectl expain replicaset`
 
+*Get all Kuberentes object
+`kubectl get all`
+
 *Create a pod directly*
 `kubectl run podName --image=image [--dry-run=client] [-o yaml] > myfile.yaml`
 
@@ -39,6 +42,12 @@ press i
 
 *Apply changed file to an already running pod*
 `kubectl apply -f myfile.yaml`
+
+## Services
+Types
+* NodePort
+* ClusterIP
+* Load Balancer
 
 *Change the image of a container in a pod*
 `kubectl set image pod/redis redis=redis`
@@ -70,4 +79,7 @@ press i
 ## Deployments
 
 *Create a sample Deployment file
-`kubectl run  deployment --image=nginx --dry-run=client -o yaml`
+`kubectl create  deployment mydeployment --image=nginx --replicas=5 --dry-run=client -o yaml `
+
+*Get deployments
+`kubectl get deployments`
