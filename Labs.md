@@ -83,3 +83,12 @@ Types
 
 *Get deployments
 `kubectl get deployments`
+
+## Services
+
+*Get help for creating a service*
+`kubectl create service nodeport --help`
+
+*Create a NodePort service*
+`kubectl create service nodeport myservice --tcp=8080:80 --node-port=30000 --dry-run=client -o yaml`
+
