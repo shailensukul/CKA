@@ -92,7 +92,7 @@ Types
 *Create a NodePort service*
 `kubectl create service nodeport myservice --tcp=8080:80 --node-port=30000 --dry-run=client -o yaml`
 
-# Imperative Commands
+## Imperative Commands
 
 *Create an run a pod*
 `kubectl run --image=nginx nginx`
@@ -111,3 +111,25 @@ Types
 
 *Change the deployment image*
 `kubectl set image deployment nginx nginx=nginx:1.18`
+
+## Scheduling
+
+You can control the node that a pod gets assigned to, at creation time with the `nodeName` element under `spec`
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  nodeName: node01
+  containers:
+  - image: ngix
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
