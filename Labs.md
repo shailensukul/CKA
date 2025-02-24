@@ -92,3 +92,22 @@ Types
 *Create a NodePort service*
 `kubectl create service nodeport myservice --tcp=8080:80 --node-port=30000 --dry-run=client -o yaml`
 
+# Imperative Commands
+
+*Create an run a pod*
+`kubectl run --image=nginx nginx`
+
+*Create a deployment*
+`kubectl create deployment --image=nginx nginx`
+
+*Expose a port of the deployment*
+`kubectl expose deployment nginx --port 80`
+
+*Edit the in-memory Kubernetes file*
+`kubectl edit deployment nginx`
+
+*Scale the deployment*
+`kubectl scale deployment nginx --replicas=5`
+
+*Change the deployment image*
+`kubectl set image deployment nginx nginx=nginx:1.18`
