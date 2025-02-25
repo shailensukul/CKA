@@ -40,6 +40,9 @@ press i
 *Create from file*
 `kubectl create -f myfile.yaml`
 
+*If you want to delete and recreate*
+`kubectl --force -f myfile.yaml`
+
 *Apply changed file to an already running pod*
 `kubectl apply -f myfile.yaml`
 
@@ -53,7 +56,13 @@ Types
 `kubectl set image pod/redis redis=redis`
 
 *Get extended information about a Pod*
-`kubectl get pods -o wide`
+`kubectl get pods -o wide --watch`
+
+*Get pods by label*
+`kubectl get pods --selector app=App1`
+
+*Count rows*
+`kubectl get pods --selector app=App1 --no-headers | wc -l`
 
 *Create ReplicaSet file via a Deployment*
 `kubectl get rs my-rs -o yaml > rs.yaml`
@@ -115,6 +124,7 @@ Types
 ## Scheduling
 
 You can control the node that a pod gets assigned to, at creation time with the `nodeName` element under `spec`
+
 ```
 apiVersion: v1
 kind: Pod
@@ -132,4 +142,16 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+```
+
+*You can add annotations to the metadata section*
+```
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  annotations:
+    buildVersion: 1.2.3
+  labels:
+    app: myd
+  name: myd
 ```
