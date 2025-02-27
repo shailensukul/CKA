@@ -79,7 +79,7 @@ Types
 *Update ReplicaSet*
 `kubectl replace -f replicaset.yaml`
 
-*Sacle ReplicaSet (does not change the replica in the file)*
+*Scale ReplicaSet (does not change the replica in the file)*
 `kubectl scale --replicas=6 -f replicaset.yaml`
 
 *Edit ReplicaSet to scale*
@@ -139,6 +139,11 @@ spec:
   - image: ngix
     name: nginx
     resources: {}
+  tolerations:
+  - key: "app"
+    operator: "Equal"
+    value: "blue"
+    effect: "NoSchedule"ue  
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
@@ -155,3 +160,8 @@ metadata:
     app: myd
   name: myd
 ```
+
+## Node
+
+*Taint a node*
+`kubectl taint nodes mynode key=value:taint-effect`
