@@ -165,3 +165,8 @@ metadata:
 
 *Taint a node*
 `kubectl taint nodes mynode key=value:taint-effect`
+
+## Node Selectoes
+
+*Label a node*
+`kubectl label node node01 labelKey=labelValue`
