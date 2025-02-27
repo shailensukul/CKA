@@ -170,3 +170,25 @@ metadata:
 
 *Label a node*
 `kubectl label node node01 labelKey=labelValue`
+
+*Add nodeSelector on Pod to select bode*
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: myPod
+  name: myPod
+spec:
+  containers:
+  - image: nginx
+    name: myPod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  nodeSelector:
+    size: Large
+status: {}
+```
