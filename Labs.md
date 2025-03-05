@@ -166,6 +166,9 @@ metadata:
 *Taint a node*
 `kubectl taint nodes mynode key=value:taint-effect`
 
+*Check for taints*
+`kubectl describe node node01 | grep taints`
+
 ## Node Selectoes
 
 *Label a node*
@@ -192,3 +195,10 @@ spec:
     size: Large
 status: {}
 ```
+
+## Node Affinity
+
+Search for node affinity and copy and paste the definition in the pod or deployment yaml
+
+## Resource Limits
+
