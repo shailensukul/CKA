@@ -6,7 +6,7 @@ Helpful scripts for the KodeKloud labs
 `select-editor`
 
 *Set the Kube Editor*
-`SET KUBE_EDITOR=nano`
+`export KUBE_EDITOR=nano`
 `echo $KUBE_EDITOR`
 
 *Vi Editor Commands*
@@ -204,6 +204,104 @@ Search for node affinity and copy and paste the definition in the pod or deploym
 
 *Define Pod resource limits*
 
-*Define Limit Range*
+Request - how much does the Pod need to be scheduled (minimum required)
+Limit - how much is the Pod allowed to consume (upper bound)
 
-*Define Quotas*
+| Request       | Limit         | Result               |
+| ------------- | ------------- |  ------------- |
+| No Requests   | No Limit      | Any Pod can take up all the resources of the node and other Pods can be scheduled and be starved |
+| No Requests   | Limits        | Requests = Limits.   |
+| Requests      | Limits        | Pods will be scheduled and limited. Pods will be limited even though resources may be available |
+| Requests      | No Limits     | Each Pod will be scheduled correct and can still use resources efficiently |
+
+Pod definition
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: app
+    image: images.my-company.example/app:v4
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+  - name: log-aggregator
+    image: images.my-company.example/log-aggregator:v6
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+```
+
+*Define Limit Ranges*
+A policy to constract the resource allocations (limits and requests) for each object (ex Pod) in a namespace
+
+
+*CPU Default Limits*
+```
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-resource-constraint
+spec:
+  limits:
+  - default: # this section defines default limits
+      cpu: 500m
+    defaultRequest: # this section defines default requests
+      cpu: 500m
+    max: # max and min define the limit range
+      cpu: "1"
+    min:
+      cpu: 100m
+    type: Container
+```
+
+*Memory Default Limits
+```
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-min-max-demo-lr
+spec:
+  limits:
+  - max:
+      memory: 1Gi
+    min:
+      memory: 500Mi
+    type: Container
+```
+
+`kubectl apply -f memory-constraints.yaml --namespace=constraints-mem-example`
+`kubectl get limitrange`
+`kubectl describe limitrange memory-constraints`
+
+*Resource Quotas*
+Limits the aggregate (total) resource consumption per namespace
+
+`kubectl create resourcequota`
+
+`kubectl create resourcequota myquota --hard=requests.cpu=1,requests.memory=1Gi,limits.cpu=2,limits.memory=2Gi --dry-run=client -o yaml`
+
+```
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  creationTimestamp: null
+  name: myquota
+spec:
+  hard:
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    requests.cpu: "1"
+    requests.memory: 1Gi
+status: {}
+```
