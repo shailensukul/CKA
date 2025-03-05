@@ -202,3 +202,8 @@ Search for node affinity and copy and paste the definition in the pod or deploym
 
 ## Resource Limits
 
+*Define Pod resource limits*
+
+*Define Limit Range*
+
+*Define Quotas*
