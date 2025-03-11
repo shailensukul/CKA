@@ -361,3 +361,46 @@ spec:
         hostPath:
           path: /var/log
 ```
+
+## Static Pods
+
+Static are created directly by the kubelet and have no dependency on the kube-scheduler.
+Kubernetes components themselves are static pods.
+
+They can be created via
+
+* Kubelet.service files 
+  * First check for the --pod-manifest-path
+  ```
+  ExecStart=...
+  --pod-manifest-path: /etc/kubernetes/manifest
+  ```
+
+  If not there, then check for the --config value, ex kubeconfig.yaml
+* kubeconfig.yaml
+```
+staticPodPath: /etc/kubernetes/manifest
+```
+
+How to find static pod path 
+
+*Find the --config= file*
+```
+ps -ef | grep kubelet
+```
+
+Then edit the config file and look for `staticPodPath:`
+```
+nano /var/lib/kubelet/config.yaml
+``` 
+
+
+
+Restart the kubelet to apply
+`systemctl restart kubelet`
+
+*View static pods*
+`docker ps`
+
+Kubectl will also list static pods
+`kubectl get pods`
