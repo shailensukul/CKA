@@ -9,6 +9,12 @@ Helpful scripts for the KodeKloud labs
 `export KUBE_EDITOR=nano`
 `echo $KUBE_EDITOR`
 
+*Linix Process Commands*
+
+`-e` - display all processes
+`-f` - full format - detailed listing
+`ps -ef | grep kubelet`
+
 *Vi Editor Commands*
 ```
 vi filename
@@ -36,6 +42,9 @@ press i
 
 *Create a pod directly*
 `kubectl run podName --image=image [--dry-run=client] [-o yaml] > myfile.yaml`
+
+*Run a Pod with arguments*
+`kubectl run podName --image=busybox --dry-run=client -o yaml --command -- sleep 1000 > myfile.yaml`
 
 *Create from file*
 `kubectl create -f myfile.yaml`
@@ -366,35 +375,21 @@ spec:
 
 Static are created directly by the kubelet and have no dependency on the kube-scheduler.
 Kubernetes components themselves are static pods.
+You can create a pod definition file in the static pod path directory
 
-They can be created via
-
-* Kubelet.service files 
-  * First check for the --pod-manifest-path
-  ```
-  ExecStart=...
-  --pod-manifest-path: /etc/kubernetes/manifest
-  ```
-
-  If not there, then check for the --config value, ex kubeconfig.yaml
-* kubeconfig.yaml
-```
-staticPodPath: /etc/kubernetes/manifest
-```
+To check if it is a static pod, do 
+`kubectl get pod mypod -o yaml`
+Check `OwnerReferences.kind` which should be set to `Node` vs `ReplicaSet`
 
 How to find static pod path 
 
 *Find the --config= file*
-```
-ps -ef | grep kubelet
-```
+`ps -ef | grep kubelet`
+
+* Ex: `/var/lib/kubelet/config.yaml`
 
 Then edit the config file and look for `staticPodPath:`
-```
-nano /var/lib/kubelet/config.yaml
-``` 
-
-
+`nano /var/lib/kubelet/config.yaml` 
 
 Restart the kubelet to apply
 `systemctl restart kubelet`
@@ -404,3 +399,73 @@ Restart the kubelet to apply
 
 Kubectl will also list static pods
 `kubectl get pods`
+
+*How to get into a node to delete a static Pod`
+
+*First, get the node information*
+`kubectl get nodes -o wide`
+Copy the internal-ip
+
+*SSH into the node*
+`ssh nodeIP or nodeName`
+
+## Schedulers
+
+Deploy a custom scheduler as a Pod
+`my-custom-scheduler.yaml`
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-custom-scheduler
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-custom-scheduler-as-kube-scheduler
+spec:
+  containers:
+  - command:
+    - kube-scheduler
+    - --address=127.0.0.1
+    - --kubeconfig=/etc/kubernetes/scheduler.conf
+    - --config=/etc/kubernetes/my-scheduler-config.yaml
+
+    image: k8s.gcr.io/kube-scheduler-amd64:v1.11.3
+    name: kube-scheduler
+```
+
+`my-scheduler-config.yaml`
+```
+apiVersion: kubescheduler.config.k8s.io/v1
+kind: KubeSchedulerConfiguration
+profiles:
+- schedlerName: my-schedule
+leaderElection:
+  leaderElect: true
+  resourceNamespace: kube-system
+  resourceName: lock-object-my-scheduler
+```
+
+*Use scheduler in Pod*
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name:: nginx
+  schedulerName: my-customer-scheduler
+```
+
+*To view scheduler, look at events*
+```
+kubectl get events -o wide
+```
+
+*To view scheduler logs*
+`kubectl logs my-customer-scheduler --namespace=kube-system
+
