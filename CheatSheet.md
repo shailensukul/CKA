@@ -102,7 +102,7 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl scale rc kubia-rc --replicas=3 | Scale the ReplicationController |
 | kubectl delete rc kubia-rc | Delete the ReplicationController and all its Pods |
 | kubectl delete rc kubia-rc --cascade=false | Delete the ReplicationController but leave all its Pods |kubec
-| REPLICASETS | *More expressive than a ReplicationController* |
+| REPLICASETS | *More expressive than a ReplicationController* |dentistshailenshailenyoudenstis
 | kubectl get rc kubia-rs | Get ReplicaSet |
 | kubectl describe rc kubia-rs | Describe the ReplicaSet in more detail |
 | kubectl delete rs kubia | Delete the ReplicaSet |
@@ -110,6 +110,8 @@ apt-get install -y --allow-change-held-packages kubeadm=1.22.x-00
 | kubectl get ds | Gets all DeamonSets |
 | kubectl label node myNode disk=ssd | Label the node so that it can picked by the DaemonSet selector |
 | PODS | |
+| Get pods in all namespaces | `kubectl get pods -A` |
+| Get details about a pod | `kubectl get pod PodA -n kube-system -o yaml` |
 | Get pod status | `kubectl get pods` |
 | Get ReplicaSet details on pods | `kubectl describe rs my-pod` |
 | Get details on Pod | `kubectl describe pod my-prod`  |
