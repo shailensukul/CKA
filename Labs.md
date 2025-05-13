@@ -469,3 +469,36 @@ kubectl get events -o wide
 *To view scheduler logs*
 `kubectl logs my-customer-scheduler --namespace=kube-system
 
+# Application Lifecycle Management
+
+## Rolling Updates
+
+Rollout status
+```
+kubectl rollout status deployment/mydeployment
+```
+
+Rollout revision history
+```
+kubectl rollout history deployment/mydeployment
+```
+
+Deployments
+
+* Create deployment
+`kubectl create -f deployment.yaml`
+
+* Get deployments
+`kubectl get deployments`
+
+* Update the deployment
+`kubectl apply -f deployment.yaml`
+or
+`kubectl set image deploymeny/mydeployment nginx-container=nginx:1.9.1`
+
+* Describe the deployment
+`kubectl describe deployment mydeployment`
+
+* Rollback the deployment
+`kubectl rollout undo deployment/mydeployment`
+
