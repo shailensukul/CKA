@@ -502,3 +502,52 @@ or
 * Rollback the deployment
 `kubectl rollout undo deployment/mydeployment`
 
+## Debug Commands for Pods
+
+```
+apiVersion: v1
+kind: Pod
+metadata
+  name: ubutnu-sleeper-pod
+spec:
+  containers:
+    - name: ubuntu-sleeper
+    image: ubuntu-sleeper
+    command: ["sleep2.0"] \\<== equivalent to entrypoint in Docker
+    args: ["10"] \\<== equivalent to the Docker cmd args
+```
+
+`kubetl create -f pod.yaml`
+
+
+## ConfigMaps
+
+`kubectl create configmap app.config --from-literal=APP_COLOR=blue --from-literal=ENV=PROD`
+
+`kubectl create configmap app.config --from-file=app_config.properties`
+
+`kubetl get configmaps`
+
+`kubectl describe configmaps`
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: myPod
+  name: myPod
+spec:
+  containers:
+  - image: nginx
+    name: myPod
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  envFrom:
+    - configMapRef:
+      name: app.config
+      key: APP_COLOR (optional)
+
+```
