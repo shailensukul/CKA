@@ -2,20 +2,21 @@
 
 Helpful scripts for the KodeKloud labs
 
-*Make Nano the default editor*
+_Make Nano the default editor_
 `select-editor`
 
-*Set the Kube Editor*
+_Set the Kube Editor_
 `export KUBE_EDITOR=nano`
 `echo $KUBE_EDITOR`
 
-*Linix Process Commands*
+_Linix Process Commands_
 
 `-e` - display all processes
 `-f` - full format - detailed listing
 `ps -ef | grep kubelet`
 
-*Vi Editor Commands*
+_Vi Editor Commands_
+
 ```
 vi filename
 
@@ -34,100 +35,102 @@ press i
 
 ```
 
-*If unsure about a command*
+_If unsure about a command_
 `kubectl expain replicaset`
 
-*Get all Kuberentes object
+\*Get all Kuberentes object
 `kubectl get all`
 
-*Create a pod directly*
+_Create a pod directly_
 `kubectl run podName --image=image [--dry-run=client] [-o yaml] > myfile.yaml`
 
-*Run a Pod with arguments*
+_Run a Pod with arguments_
 `kubectl run podName --image=busybox --dry-run=client -o yaml --command -- sleep 1000 > myfile.yaml`
 
-*Create from file*
+_Create from file_
 `kubectl create -f myfile.yaml`
 
-*If you want to delete and recreate*
+_If you want to delete and recreate_
 `kubectl --force -f myfile.yaml`
 
-*Apply changed file to an already running pod*
+_Apply changed file to an already running pod_
 `kubectl apply -f myfile.yaml`
 
 ## Services
-Types
-* NodePort
-* ClusterIP
-* Load Balancer
 
-*Change the image of a container in a pod*
+Types
+
+- NodePort
+- ClusterIP
+- Load Balancer
+
+_Change the image of a container in a pod_
 `kubectl set image pod/redis redis=redis`
 
-*Get extended information about a Pod*
+_Get extended information about a Pod_
 `kubectl get pods -o wide --watch`
 
-*Get pods by label*
+_Get pods by label_
 `kubectl get pods --selector app=App1`
 
-*Count rows*
+_Count rows_
 `kubectl get pods --selector app=App1 --no-headers | wc -l`
 
-*Create ReplicaSet file via a Deployment*
+_Create ReplicaSet file via a Deployment_
 `kubectl get rs my-rs -o yaml > rs.yaml`
 
-*ReplicaSet commands*
+_ReplicaSet commands_
 
 `kubectl create -f relicaset.yaml`
 
 `kubectl get replicaset`
 
-*Delete ReplicaSet*
+_Delete ReplicaSet_
 `kubectl delete replicaset my-rs`
 
-*Update ReplicaSet*
+_Update ReplicaSet_
 `kubectl replace -f replicaset.yaml`
 
-*Scale ReplicaSet (does not change the replica in the file)*
+_Scale ReplicaSet (does not change the replica in the file)_
 `kubectl scale --replicas=6 -f replicaset.yaml`
 
-*Edit ReplicaSet to scale*
+_Edit ReplicaSet to scale_
 `kubectl edit rs my-rs`
 
 ## Deployments
 
-*Create a sample Deployment file
+\*Create a sample Deployment file
 `kubectl create  deployment mydeployment --image=nginx --replicas=5 --dry-run=client -o yaml `
 
-*Get deployments
+\*Get deployments
 `kubectl get deployments`
 
 ## Services
 
-*Get help for creating a service*
+_Get help for creating a service_
 `kubectl create service nodeport --help`
 
-*Create a NodePort service*
+_Create a NodePort service_
 `kubectl create service nodeport myservice --tcp=8080:80 --node-port=30000 --dry-run=client -o yaml`
 
 ## Imperative Commands
 
-*Create an run a pod*
+_Create an run a pod_
 `kubectl run --image=nginx nginx`
 
-*Create a deployment*
+_Create a deployment_
 `kubectl create deployment --image=nginx nginx`
 
-*Expose a port of the deployment*
+_Expose a port of the deployment_
 `kubectl expose deployment nginx --port 80`
 
-*Edit the in-memory Kubernetes file*
+_Edit the in-memory Kubernetes file_
 `kubectl edit deployment nginx`
 
-*Scale the deployment*
+_Scale the deployment_
 `kubectl scale deployment nginx --replicas=5`
 
-*Change the deployment image*
+_Change the deployment image_
 `kubectl set image deployment nginx nginx=nginx:1.18`
 
 ## Scheduling
@@ -152,13 +155,14 @@ spec:
   - key: "app"
     operator: "Equal"
     value: "blue"
-    effect: "NoSchedule"ue  
+    effect: "NoSchedule"ue
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
 ```
 
-*You can add annotations to the metadata section*
+_You can add annotations to the metadata section_
+
 ```
 kind: Deployment
 metadata:
@@ -172,18 +176,18 @@ metadata:
 
 ## Node
 
-*Taint a node*
+_Taint a node_
 `kubectl taint nodes mynode key=value:taint-effect`
 
-*Check for taints*
+_Check for taints_
 `kubectl describe node node01 | grep taints`
 
 ## Node Selectoes
 
-*Label a node*
+_Label a node_
 `kubectl label node node01 labelKey=labelValue`
 
-*Add nodeSelector on Pod to select bode*
+_Add nodeSelector on Pod to select bode_
 
 ```
 apiVersion: v1
@@ -211,19 +215,20 @@ Search for node affinity and copy and paste the definition in the pod or deploym
 
 ## Resource Limits
 
-*Define Pod resource limits*
+_Define Pod resource limits_
 
 Request - how much does the Pod need to be scheduled (minimum required)
 Limit - how much is the Pod allowed to consume (upper bound)
 
-| Request       | Limit         | Result               |
-| ------------- | ------------- |  ------------- |
-| No Requests   | No Limit      | Any Pod can take up all the resources of the node and other Pods can be scheduled and be starved |
-| No Requests   | Limits        | Requests = Limits.   |
-| Requests      | Limits        | Pods will be scheduled and limited. Pods will be limited even though resources may be available |
-| Requests      | No Limits     | Each Pod will be scheduled correct and can still use resources efficiently |
+| Request     | Limit     | Result                                                                                           |
+| ----------- | --------- | ------------------------------------------------------------------------------------------------ |
+| No Requests | No Limit  | Any Pod can take up all the resources of the node and other Pods can be scheduled and be starved |
+| No Requests | Limits    | Requests = Limits.                                                                               |
+| Requests    | Limits    | Pods will be scheduled and limited. Pods will be limited even though resources may be available  |
+| Requests    | No Limits | Each Pod will be scheduled correct and can still use resources efficiently                       |
 
 Pod definition
+
 ```
 apiVersion: v1
 kind: Pod
@@ -251,10 +256,11 @@ spec:
         cpu: "500m"
 ```
 
-*Define Limit Ranges*
+_Define Limit Ranges_
 A policy to constract the resource allocations (limits and requests) for each object (ex Pod) in a namespace
 
-*CPU Default Limits*
+_CPU Default Limits_
+
 ```
 apiVersion: v1
 kind: LimitRange
@@ -273,7 +279,8 @@ spec:
     type: Container
 ```
 
-*Memory Default Limits*
+_Memory Default Limits_
+
 ```
 apiVersion: v1
 kind: LimitRange
@@ -292,7 +299,7 @@ spec:
 `kubectl get limitrange`
 `kubectl describe limitrange memory-constraints`
 
-*Resource Quotas*
+_Resource Quotas_
 Limits the aggregate (total) resource consumption per namespace
 
 `kubectl create resourcequota`
@@ -315,13 +322,14 @@ status: {}
 ```
 
 ## Daemonsets
+
 Runs one copy of pod per node
-Daemonsets are analogous to deployments. 
+Daemonsets are analogous to deployments.
 
 `kubectl create deployment elasticsearch -n kube-system --image=nginx --dry-run=client -o yaml > myds.yaml`
 
-* Change the `kind` to DaemonSet
-* Get rid of `replicas` and `strategy`
+- Change the `kind` to DaemonSet
+- Get rid of `replicas` and `strategy`
 
 ```
 apiVersion: apps/v1
@@ -377,42 +385,43 @@ Static are created directly by the kubelet and have no dependency on the kube-sc
 Kubernetes components themselves are static pods.
 You can create a pod definition file in the static pod path directory
 
-To check if it is a static pod, do 
+To check if it is a static pod, do
 `kubectl get pod mypod -o yaml`
 Check `OwnerReferences.kind` which should be set to `Node` vs `ReplicaSet`
 
-How to find static pod path 
+How to find static pod path
 
-*Find the --config= file*
+_Find the --config= file_
 `ps -ef | grep kubelet`
 
-* Ex: `/var/lib/kubelet/config.yaml`
+- Ex: `/var/lib/kubelet/config.yaml`
 
 Then edit the config file and look for `staticPodPath:`
-`nano /var/lib/kubelet/config.yaml` 
+`nano /var/lib/kubelet/config.yaml`
 
 Restart the kubelet to apply
 `systemctl restart kubelet`
 
-*View static pods*
+_View static pods_
 `docker ps`
 
 Kubectl will also list static pods
 `kubectl get pods`
 
-*How to get into a node to delete a static Pod`
+\*How to get into a node to delete a static Pod`
 
-*First, get the node information*
+_First, get the node information_
 `kubectl get nodes -o wide`
 Copy the internal-ip
 
-*SSH into the node*
+_SSH into the node_
 `ssh nodeIP or nodeName`
 
 ## Schedulers
 
 Deploy a custom scheduler as a Pod
 `my-custom-scheduler.yaml`
+
 ```
 apiVersion: v1
 kind: Pod
@@ -437,6 +446,7 @@ spec:
 ```
 
 `my-scheduler-config.yaml`
+
 ```
 apiVersion: kubescheduler.config.k8s.io/v1
 kind: KubeSchedulerConfiguration
@@ -448,7 +458,8 @@ leaderElection:
   resourceName: lock-object-my-scheduler
 ```
 
-*Use scheduler in Pod*
+_Use scheduler in Pod_
+
 ```
 apiVersion: v1
 kind: Pod
@@ -461,12 +472,13 @@ spec:
   schedulerName: my-customer-scheduler
 ```
 
-*To view scheduler, look at events*
+_To view scheduler, look at events_
+
 ```
 kubectl get events -o wide
 ```
 
-*To view scheduler logs*
+_To view scheduler logs_
 `kubectl logs my-customer-scheduler --namespace=kube-system
 
 # Application Lifecycle Management
@@ -474,33 +486,35 @@ kubectl get events -o wide
 ## Rolling Updates
 
 Rollout status
+
 ```
 kubectl rollout status deployment/mydeployment
 ```
 
 Rollout revision history
+
 ```
 kubectl rollout history deployment/mydeployment
 ```
 
 Deployments
 
-* Create deployment
-`kubectl create -f deployment.yaml`
+- Create deployment
+  `kubectl create -f deployment.yaml`
 
-* Get deployments
-`kubectl get deployments`
+- Get deployments
+  `kubectl get deployments`
 
-* Update the deployment
-`kubectl apply -f deployment.yaml`
-or
-`kubectl set image deploymeny/mydeployment nginx-container=nginx:1.9.1`
+- Update the deployment
+  `kubectl apply -f deployment.yaml`
+  or
+  `kubectl set image deploymeny/mydeployment nginx-container=nginx:1.9.1`
 
-* Describe the deployment
-`kubectl describe deployment mydeployment`
+- Describe the deployment
+  `kubectl describe deployment mydeployment`
 
-* Rollback the deployment
-`kubectl rollout undo deployment/mydeployment`
+- Rollback the deployment
+  `kubectl rollout undo deployment/mydeployment`
 
 ## Debug Commands for Pods
 
@@ -518,7 +532,6 @@ spec:
 ```
 
 `kubetl create -f pod.yaml`
-
 
 ## ConfigMaps
 
@@ -550,4 +563,55 @@ spec:
       name: app.config
       key: APP_COLOR (optional)
 
+```
+
+## Secrets
+
+`kubectl get secrets mysecret`
+
+`kubectl create secret generic mysecret --from-literalkey=value`
+
+`kubectl create secret generic mysecret --from-file=filePath`
+
+File secrets need to be encoded
+`echo -n 'mypassword' | base64`
+
+Decode
+`echo -n 'encodedPassword' | base64 --decode`
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secret-sa-sample
+  annotations:
+    kubernetes.io/service-account.name: "sa-name"
+type: kubernetes.io/service-account-token
+data:
+  extra: YmFyCg==
+```
+
+Use in pod
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  - name: mypod
+    image: redis
+    volumeMounts:
+    - name: foo
+      mountPath: "/etc/foo"
+      readOnly: true
+    envFrom:
+      - secretRef:
+          name: appSecret
+  volumes:
+  - name: foo
+    secret:
+      secretName: mysecret
+      optional: true
 ```
