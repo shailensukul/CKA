@@ -607,11 +607,45 @@ spec:
       mountPath: "/etc/foo"
       readOnly: true
     envFrom:
-      - secretRef:
-          name: appSecret
+    - secretRef:
+        name: appSecret
   volumes:
   - name: foo
     secret:
       secretName: mysecret
       optional: true
 ```
+
+## Scaling
+
+Resource usage
+`kubectl top pod my-pod`
+
+### Cluster autosaler
+
+### Horizontal Pod Autoscaler
+
+-- manual scaling
+`kubectl scale deployment my-deployment --replicas=3`
+
+-- auto scale
+`kubectl autoscale deployment my-deployment --cpu-percent=50 --min=1 --max=10`
+
+--get status
+`kubectl get hpa`
+
+-- delete
+`kubectl delete hpa my-deployment`
+
+### Vertical Pod Autoscaler
+
+-- manual scaling
+`kubectl edit deployment`
+
+-- needs to be installed
+`kubectl apply -f https://github.com/kubernetes/autoscaler/releases/latest/download/vertical-pod-autoscaler.yml`
+
+-- check
+`kubectl get pods -n kube-system | grep vpa`
+
+`kubectl describe vpa my-vpa`
